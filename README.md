@@ -1,5 +1,5 @@
-# vue-request
-
+# vue-models
+https://api.travis-ci.org/nickforddesign/vue-models.svg?branch=master
 [![Build](https://travis-ci.org/nickforddesign/vue-models.svg?branch=master)](#)
 [![Coverage Status](https://coveralls.io/repos/github/nickforddesign/vue-models/badge.svg?branch=master)](https://coveralls.io/github/nickforddesign/vue-models?branch=master)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
@@ -26,7 +26,7 @@ Vue.use(VueModels)
 The Model class returns a Vue instance with some default helper methods and computed properties. The following is an example of extending the Model class:
 
 ```js
-import Model from '@/modules/model'
+import { Model } from 'vue-models'
 
 const defaults = {
   name: 'user',
@@ -53,13 +53,13 @@ export default class User extends Model {
 ```
 
 ```js
-import UserModel from '@/models/user'
+import UserModel from './models/user'
 const user = new UserModel({
-  first_name: 'Hidetoshi',
-  last_name: 'Hasagawa'
+  first_name: 'Jane',
+  last_name: 'Doe'
 })
 
-console.log(user.full_name) // returns 'Hidetoshi Hasagawa'
+console.log(user.full_name) // returns 'Jane Doe'
 
 ```
 

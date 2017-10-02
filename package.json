@@ -10,7 +10,8 @@
     "start": "node build/dev-server.js",
     "build": "webpack ./src/index.js ./dist/index.js",
     "lint": "eslint --ext .js,.vue src",
-    "test": "export NODE_ENV=test && jest"
+    "test": "export NODE_ENV=test && jest",
+    "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
   },
   "dependencies": {
     "lodash": "^4.17.4",
