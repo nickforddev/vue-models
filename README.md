@@ -4,7 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/nickforddesign/vue-models/badge.svg?branch=master)](https://coveralls.io/github/nickforddesign/vue-models?branch=master)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-> A better models plugins for Vue.js
+> A better models plugin for Vue.js
 
 ## Installation
 
