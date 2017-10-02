@@ -1,139 +1,119 @@
 # vue-request
 
-[![Build](https://travis-ci.org/nickforddesign/vue-req.svg?branch=master)](#)
-[![Coverage Status](https://coveralls.io/repos/github/nickforddesign/vue-req/badge.svg?branch=master)](https://coveralls.io/github/nickforddesign/vue-req?branch=master)
+[![Build](https://travis-ci.org/nickforddesign/vue-models.svg?branch=master)](#)
+[![Coverage Status](https://coveralls.io/repos/github/nickforddesign/vue-models/badge.svg?branch=master)](https://coveralls.io/github/nickforddesign/vue-models?branch=master)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-> A modern fetch plugin for Vue.js with easy config config and hooks
+> A better models plugins for Vue.js
 
 ## Installation
 
 ``` bash
-npm install vue-req
+npm install vue-models
 ```
 
 ## Setup
 
 ```js
 import Vue from 'vue'
-import VueRequest from 'vue-req'
+import VueModels from 'vue-models'
 
-Vue.use(VueRequest, options)
+Vue.use(VueModels)
 ```
 
-## Options
+## Models
 
-### headers [Object]
-Headers can contain any custom headers you'd like to include in your requests. The values can be properties or methods (ie. their values can either be functions, literals, or references). Use functions for values that may change over time, such as Vuex getters.
-
-```js
-import store from './store'
-
-const Identity = {
-  $oid: '4234c0a877ccf94401baz'
-}
-
-const options = {
-  headers: {
-    Authorization() {
-      return store.getters.auth_token
-    },
-    Refresh: 'example_refresh_token',
-    Identity
-  }
-}
-
-Vue.use(VueRequest, options)
-```
-
-### before [Function]
-Before hook to fire before each request. The hook uses async/await, so asynchronous hooks will complete before the actual request is made. This is particularly useful for checking if you have expired tokens and refreshing them before a request.
-
-Here's an example of a before hook checking for expired tokens and attempting to refresh before the original request:
+The Model class returns a Vue instance with some default helper methods and computed properties. The following is an example of extending the Model class:
 
 ```js
-import moment from 'moment'
-import store from './store'
+import Model from '@/modules/model'
 
-const token = {
-  id: '1234567890',
-  expires: '2017-09-30T01:44:19.273Z'
-}
-const options = {
-  async before() {
-    if (moment.utc(token.expires) >= moment.utc()) {
-      store.dispatch('refresh_tokens')
+const defaults = {
+  name: 'user',
+  computed: {
+    full_name() {
+      return `${this.first_name} ${this.last_name}`
     }
   }
 }
 
-Vue.use(VueRequest, options)
-```
-
-### timeout [Function]
-Timeout hook to fire in the event of a timeout.
-
-```js
-const options = {
-  timeout() {
-    alert('The request timed out.')
+export default class User extends Model {
+  static schema() {
+    return {
+      id: String,
+      first_name: String,
+      last_name: String
+    }
+  }
+  constructor(attributes, options) {
+    super(attributes, [defaults, options])
   }
 }
 
-Vue.use(VueRequest, options)
 ```
 
-### timeout_duration [Number]
-Duration in ms for fetch timeout limit.
-
 ```js
-const options = {
-  timeout_duration: 25000
-}
+import UserModel from '@/models/user'
+const user = new UserModel({
+  first_name: 'Hidetoshi',
+  last_name: 'Hasagawa'
+})
 
-Vue.use(VueRequest, options)
+console.log(user.full_name) // returns 'Hidetoshi Hasagawa'
+
 ```
 
-## Usage
+The Model class has some default methods and computed attributes that are useful for basic CRUD operations:
+
+### Model.basePath
+
+An overwriteable attribute that either uses the name of the model, or the urlRoot property from the options parameter.
+
+### Model.url
+
+An overwriteable attribute that is used for XHR requests. This will override the construction of the urls used for all CRUD operations.
+
+### Model.isNew
+
+Based on whether or not the model has an id. Affects whether or not Model.save is a POST or PUT.
+
+### Model.fetch()
+
+Fetches the model via a GET at Model.url
+
+### Model.save(data, options)
+
+Data must be valid json, options may contain a `path` property in order to deviate from the standard urlRoot.
+
+### Model.destroy()
+
+Sends a DELETE request for the model.
+
+### Model.reset()
+
+Uses the schema definition to reset all values to their default values.
+
+### Model.toJSON()
+
+Returns all approved data attributes, in addition to all computed properties as json.
+
+
+Models can be bound to a Vue component using the following syntax:
 
 ```js
-import Vue from 'vue'
 export default {
-  mounted() {
-    this.fetch()
-  },
-  methods: {
-    async fetch() {
-      const response = await this.$request('/data')
-      this.$store.dispatch('set_data', response)
-    },
-    save() {
-      const response = await this.$request('/data', {
-        method: 'put',
-        body: {
-          foo: 'bar'
-        }
-      })
-      this.$store.dispatch('saved_data', response)
+  models: {
+    user() {
+      return new UserModel(data)
     }
+  },
+  created() {
+    console.log(this.$user.full_name);
   }
 }
 ```
 
-## Requests
-The request function accepts the following parameters:
-
-### url [String]
-The base url to make relative requests from. If an absolute url is passed to the request function, this will be overriden.
-
-### options [Object]
-The options parameter accepts the following parameters:
-#### method [String]
-The method of the request (get (default), put, post, delete, options)
-#### body [Object|String]
-The body of the request
-### headers [Headers]
-Custom headers to add to the request
+NOTE: By default, models are reset when the parent component is destroyed. To disable this, the `persist: true` option can be provided in the model options.
 
 
 ## Build Setup
