@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import VueModel, { Model } from '../index'
-import VueRequest from 'vue-req'
+import VueRequests from 'vue-requests'
 import User from '../demo/user'
 import tenant_data from './tenant_data'
 
-Vue.use(VueRequest)
+Vue.use(VueRequests)
 Vue.use(VueModel)
 
 fetch.mockResponse(JSON.stringify(tenant_data), {

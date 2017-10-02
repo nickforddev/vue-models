@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { Request } from 'vue-req'
+import { Request } from 'vue-requests'
 
 export { Request }
 
