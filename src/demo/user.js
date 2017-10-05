@@ -1,4 +1,4 @@
-import _ from 'lodash'
+// import _ from 'lodash'
 import { Model } from '../index'
 import { ObjectId, ISODate } from './types'
 
@@ -6,14 +6,22 @@ const defaults = {
   name: 'user',
   computed: {
     basePath() {
-      const basePath = this.$options.basePath
-      return basePath || this.role + 's'
+      if (this.role) {
+        const basePath = this.$options.basePath
+        return basePath || this.role + 's'
+      } else {
+        return ''
+      }
     },
     full_name() {
-      return `${this.first_name} ${this.last_name}`
+      return this.role
+        ? `${this.first_name} ${this.last_name}`
+        : ``
     },
     initials() {
-      return `${this.first_name[0]}${this.last_name[0]}`.toUpperCase()
+      return this.role
+        ? `${this.first_name[0]}${this.last_name[0]}`.toUpperCase()
+        : ``
     }
   }
 }
@@ -45,26 +53,43 @@ export default class User extends Model {
       role: {
         type: String
       },
-      password: {
-        type: String
-      },
-      avatar_color: {
-        type: String
-      },
-      dwolla: {
-        type: Object
-      },
       notifications: {
-        type: Object
+        type: Object,
+        properties: {
+          alarm: {
+            type: ISODate
+          },
+          test: {
+            type: Object,
+            properties: {
+              one: {
+                type: ISODate
+              },
+              two: {
+                type: Object,
+                properties: {
+                  three: {
+                    type: ISODate
+                  }
+                }
+              }
+            }
+          }
+        }
       },
       status: {
         type: Object
       },
-      leases: {
-        type: Array
-      },
-      terms_accepted: {
-        type: Object
+      things: {
+        type: Array,
+        items: {
+          id: {
+            type: ObjectId
+          },
+          created: {
+            type: ISODate
+          }
+        }
       }
     }
   }

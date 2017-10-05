@@ -34,7 +34,7 @@ export default class Model {
           return basePath || this.$options.name + 's'
         },
         urlRoot() {
-          return `${this.basePath}/${this.id}`;
+          return `${this.basePath}/${this.id}`
         },
         isNew() {
           return this.id === undefined
@@ -98,6 +98,7 @@ export default class Model {
           return req
         },
         set(data) {
+          console.log('set', data)
           const data_decoded = this.decode(data)
           _.merge(this, data_decoded)
           return this

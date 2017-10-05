@@ -26,7 +26,7 @@ const init = (vm) => {
   }
   if (isDef(vm.$models)) {
     if (!vm.$options.computed) {
-      vm.$options.computed = {};
+      vm.$options.computed = {}
     }
     for (let key in vm.$models) {
       makeComputedProp(vm, key)

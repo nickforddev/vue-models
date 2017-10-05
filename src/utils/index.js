@@ -103,15 +103,21 @@ const traverse = (data, schema, func) => {
     output = data.map(item => {
       for (let key in item) {
         if (schema.items && key in schema.items) {
-          item[key] = traverse(item[key], schema[key], func)
+          if ([Object, Array, Function].includes(schema.items[key])) {
+            item[key] = traverse(item[key], schema[key], func)
+          } else {
+            item[key] = func(item[key], schema.items[key])
+          }
         }
       }
       return item
     })
   } else if (data instanceof Object) {
     for (let key in data) {
-      if (schema.properties && key in schema.properties) {
+      if (schema[key].items) {
         output[key] = traverse(data[key], schema[key], func)
+      } else if (schema[key] && schema[key].properties) {
+        output[key] = traverse(data[key], schema[key].properties, func)
       } else if (key in schema) {
         output[key] = func(data[key], schema[key])
       } else {
