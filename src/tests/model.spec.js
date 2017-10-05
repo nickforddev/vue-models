@@ -12,7 +12,7 @@ fetch.mockResponse(JSON.stringify(tenant_data), {
 })
 
 describe('VueModel basics', () => {
-  it('should access static schema property', () => {
+  it('should have access to static schema method', () => {
     expect(Model.schema())
       .toBeInstanceOf(Object)
   })
@@ -20,10 +20,16 @@ describe('VueModel basics', () => {
   const model = new User({
     id: '123'
   })
+  it('should properly set id', () => {
+    expect(model.id)
+      .toBe('123')
+  })
+
   it('should fetch a model', () => {
     expect.assertions(1)
     return model.fetch()
-      .then(() => {
+      .then((res) => {
+        console.log(model.toJSON(), res)
         expect(model.full_name)
           .toBe('Taco Cat')
       })

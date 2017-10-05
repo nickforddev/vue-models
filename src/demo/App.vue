@@ -1,12 +1,37 @@
 <template>
   <div id="app">
     <h1>vue-models</h1>
+    <p>
+      Below is a demonstration of using custom types in a model schema to decode 
+      <a href="https://docs.mongodb.com/manual/reference/mongodb-extended-json/" target="_blank">extended json</a> 
+      from MongoDB. The data is flattened for use client-side, and then re-encoded
+      to extended json when saving, or as otherwise needed.
+    </p>
     <button @click="setUser">Set User</button>
     <button @click="resetUser">Reset User</button>
-    <h2>decoded model:</h2>
-    <pre>{{ $user }}</pre>
-    <h2>encoded model:</h2>
-    <pre>{{ encoded }}</pre>
+
+    <table>
+      <thead>
+        <tr>
+          <td>
+            <h2>encoded model</h2>
+          </td>
+          <td>
+            <h2>decoded model</h2>
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <pre>{{ encoded }}</pre>
+          </td>
+          <td>
+            <pre>{{ $user }}</pre>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>
 
@@ -80,7 +105,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -88,6 +113,23 @@ export default {
   text-align: center;
   color: #2c3e50;
   text-align: left;
-  padding: 30px;
+  padding: 0 30px;
+  width: 100%;
+  max-width: 1000px;
+  box-sizing: border-box;
+}
+
+table {
+  width: 100%;
+  margin-top: 30px;
+}
+
+table tbody {
+  vertical-align: top;
+}
+
+td {
+  padding: 0 12px;
+  border: 1px solid #ccc;
 }
 </style>

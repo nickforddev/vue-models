@@ -1,5 +1,6 @@
 # vue-models
 
+[![Version](https://img.shields.io/npm/v/vue-models.svg?maxAge=2592000)](#)
 [![Build](https://travis-ci.org/nickforddesign/vue-models.svg?branch=master)](#)
 [![Coverage Status](https://coveralls.io/repos/github/nickforddesign/vue-models/badge.svg?branch=master)](https://coveralls.io/github/nickforddesign/vue-models?branch=master)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
@@ -63,6 +64,8 @@ console.log(user.full_name) // returns 'Jane Doe'
 
 ```
 
+## Computed Properties
+
 The Model class has some default methods and computed attributes that are useful for basic CRUD operations:
 
 ### Model.basePath
@@ -76,6 +79,8 @@ An overwriteable attribute that is used for XHR requests. This will override the
 ### Model.isNew
 
 Based on whether or not the model has an id. Affects whether or not Model.save is a POST or PUT.
+
+## Methods
 
 ### Model.fetch()
 
@@ -98,6 +103,8 @@ Uses the schema definition to reset all values to their default values.
 Returns all approved data attributes, in addition to all computed properties as json.
 
 
+## Binding to Vue components
+
 Models can be bound to a Vue component using the following syntax:
 
 ```js
@@ -115,6 +122,13 @@ export default {
 
 NOTE: By default, models are reset when the parent component is destroyed. To disable this, the `persist: true` option can be provided in the model options.
 
+## Schema
+
+Model classes use a static schema method to defined the initial data properties for the Vue instance. The schema format is heavily influenced by JSON Schema, with few differences. JSON Schema is frequently used for validation, while `vue-model` uses a schema to define initial state, and to transform data. Data can be transformed by creating custom type classes that mimic the behavior of the native constructors. Run the demo for a comprehensive example of data transformation that handles extended JSON ObjectIds and ISODates.
+
+## Requests
+
+This plugin uses the [`vue-requests`](http://github.com/nickforddesign/vue-requests) plugin, which is a wrapper around the fetch API and includes the [`whatwg-fetch`](https://github.com/github/fetch) polyfill.
 
 ## Build Setup
 

@@ -8,14 +8,14 @@
   "scripts": {
     "dev": "node build/dev-server.js",
     "start": "node build/dev-server.js",
-    "build": "webpack ./src/index.js ./dist/index.js",
+    "build": "node build/build.js",
     "lint": "eslint --ext .js,.vue src",
     "test": "export NODE_ENV=test && jest",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
   },
   "dependencies": {
     "lodash": "^4.17.4",
-    "vue-requests": "^1.0.4",
+    "vue-requests": "^1.0.8",
     "whatwg-fetch": "^2.0.3"
   },
   "devDependencies": {
@@ -67,8 +67,7 @@
     "webpack-bundle-analyzer": "^2.2.1",
     "webpack-dev-middleware": "^1.10.0",
     "webpack-hot-middleware": "^2.18.0",
-    "webpack-merge": "^4.1.0",
-    "xhr-mock": "^1.9.1"
+    "webpack-merge": "^4.1.0"
   },
   "engines": {
     "node": ">= 4.0.0",
@@ -96,7 +95,7 @@
       ".*\\.(vue)$": "<rootDir>/node_modules/jest-vue-preprocessor"
     },
     "transformIgnorePatterns": [
-      "node_modules/(?!vue-req)"
+      "node_modules/(?!vue-requests)"
     ],
     "setupFiles": [
       "./src/tests/jest.conf.js"

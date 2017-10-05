@@ -55,19 +55,10 @@ export default class Model {
         return default_attributes()
       },
       methods: {
-        fetch() {
-          // console.log(this._vm)
-          // if (!this._vm) return
-          // const req = new Request(this.urlRoot)
-          const req = this.$request(this.urlRoot)
-          req
-          .then((response) => {
-            this.set(response)
-          })
-          // .catch((err) => {
-          //   console.warn(err)
-          // })
-          return req
+        async fetch() {
+          const response = await this.$request(this.urlRoot)
+          this.set(response)
+          return response
         },
         destroy() {
           // return new Request(this.urlRoot, {
@@ -98,7 +89,7 @@ export default class Model {
           return req
         },
         set(data) {
-          console.log('set', data)
+          // console.log('set', data)
           const data_decoded = this.decode(data)
           _.merge(this, data_decoded)
           return this
