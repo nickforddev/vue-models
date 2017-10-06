@@ -7,9 +7,25 @@
       from MongoDB. The data is flattened for use client-side, and then re-encoded
       to extended json when saving, or as otherwise needed.
     </p>
-    <button @click="setUser">Set User</button>
-    <button @click="resetUser">Reset User</button>
+    <div v-if="$user.role">
+      <button @click="resetUser">Clear Model</button>
+    </div>
+    <div v-else>
+      <button @click="setUser">Populate Model</button>
+    </div>
 
+    <h2>Vue Binding</h2>
+
+    <card :model="$user" />
+
+    <div v-if="$user.things.length">
+      <h2>$user.things</h2>
+      <div class="item" v-for="(item, index) in $user.things" :key="index">
+        {{ item }}
+      </div>
+    </div>
+
+    <h2>Schema Transformation</h2>
     <table>
       <thead>
         <tr>
@@ -36,13 +52,65 @@
 </template>
 
 <script>
+import card from './card'
 import User from './user'
+
+const defaults = {
+  id: {
+    $oid: '586e6d75b7a7bc5c852c60a5'
+  },
+  created: {
+    $date: '2016-12-16T00:00:00'
+  },
+  updated: '2016-12-16T00:00:00',
+  role: 'admin',
+  first_name: 'Tony',
+  last_name: 'Tiger',
+  email: 'tonytiger@gmail.com',
+  notifications: {
+    alarm: {
+      $date: '2016-12-16T00:00:00'
+    },
+    test: {
+      one: {
+        $date: '2016-12-16T00:00:00'
+      },
+      two: {
+        three: {
+          $date: '2016-12-16T00:00:00'
+        }
+      }
+    }
+  },
+  things: [
+    {
+      id: {
+        $oid: '42356d75b7a7bc5c52c11a90'
+      },
+      created: {
+        $date: '2016-12-16T00:00:00'
+      }
+    },
+    {
+      id: {
+        $oid: '09a11c25c5cb7a7b57d65324'
+      },
+      created: {
+        $date: '2016-12-16T00:00:00'
+      }
+    }
+  ]
+}
+
 export default {
   name: 'app',
   models: {
     user() {
-      return new User()
+      return new User(defaults)
     }
+  },
+  components: {
+    card
   },
   computed: {
     encoded() {
@@ -51,52 +119,7 @@ export default {
   },
   methods: {
     setUser() {
-      this.$user = {
-        id: {
-          $oid: '586e6d75b7a7bc5c852c60a5'
-        },
-        created: {
-          $date: '2016-12-16T00:00:00'
-        },
-        updated: '2016-12-16T00:00:00',
-        role: 'admin',
-        first_name: 'Tony',
-        last_name: 'Tiger',
-        email: 'tonytiger@gmail.com',
-        notifications: {
-          alarm: {
-            $date: '2016-12-16T00:00:00'
-          },
-          test: {
-            one: {
-              $date: '2016-12-16T00:00:00'
-            },
-            two: {
-              three: {
-                $date: '2016-12-16T00:00:00'
-              }
-            }
-          }
-        },
-        things: [
-          {
-            id: {
-              $oid: '42356d75b7a7bc5c52c11a90'
-            },
-            created: {
-              $date: '2016-12-16T00:00:00'
-            }
-          },
-          {
-            id: {
-              $oid: '09a11c25c5cb7a7b57d65324"'
-            },
-            created: {
-              $date: '2016-12-16T00:00:00'
-            }
-          }
-        ]
-      }
+      this.$user = defaults
     },
     resetUser() {
       this.$user.reset()
