@@ -1,5 +1,5 @@
 /**
-  * vue-models v1.0.2
+  * vue-models v1.0.3
   * (c) 2017 Nick Ford
   * @license MIT
   */
