@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import VueModel, { Model } from '../index'
+import VueModel, { Model } from '../../dist/vue-models.esm'
 import VueRequests from 'vue-requests'
 import User from '../demo/user'
 import tenant_data from './tenant_data'

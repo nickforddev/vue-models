@@ -21411,12 +21411,13 @@ var ISODate = function (_Type2) {
 // import Vue from 'vue'
 var Vue = void 0;
 
-function init$2(_Vue) {
-  Vue = _Vue;
-}
-
 var Model = function () {
   _createClass(Model, null, [{
+    key: 'init',
+    value: function init(_Vue) {
+      Vue = _Vue;
+    }
+  }, {
     key: 'schema',
     value: function schema() {
       return {
@@ -21433,7 +21434,6 @@ var Model = function () {
 
     _classCallCheck(this, Model);
 
-    console.log(Vue);
     var _schema = this.constructor.schema();
     var default_attributes = getDefaultsFromSchema(_schema);
 
@@ -21557,8 +21557,7 @@ var Model = function () {
 
     var model_options = lodash_merge({}, default_options, _options);
 
-    console.log(Vue);
-    return Vue(model_options);
+    return new Vue(model_options);
   }
 
   return Model;
@@ -21573,7 +21572,7 @@ var VueModel = function () {
     key: 'install',
     value: function install(Vue, options) {
       Vue.mixin(makeMixin(Vue));
-      init$2(Vue);
+      Model.init(Vue);
     }
   }]);
 

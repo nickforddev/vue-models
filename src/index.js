@@ -4,7 +4,7 @@ import { Model } from './model'
 export default class VueModel {
   static install(Vue, options) {
     Vue.mixin(makeMixin(Vue))
-    // init(Vue)
+    Model.init(Vue)
   }
   static Model = Model
 }

@@ -1,4 +1,4 @@
-import Vue from 'vue'
+// import Vue from 'vue'
 import _get from 'lodash.get'
 import _merge from 'lodash.merge'
 import _reduce from 'lodash.reduce'
@@ -6,16 +6,12 @@ import _isEmpty from 'lodash.isempty'
 import { ISODate } from './demo/types'
 import * as utils from './utils'
 
-// let Vue
-
-// export function init (_Vue) {
-//   Vue = _Vue
-// }
+let Vue
 
 class Model {
-  // static init (_Vue) {
-  //   Vue = _Vue
-  // }
+  static init (_Vue) {
+    Vue = _Vue
+  }
   static schema() {
     return {
       id: String,
