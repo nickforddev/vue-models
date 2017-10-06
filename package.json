@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "lodash": "^4.17.4",
-    "vue-requests": "^1.0.10",
+    "vue-requests": "^1.0.12",
     "whatwg-fetch": "^2.0.3"
   },
   "devDependencies": {

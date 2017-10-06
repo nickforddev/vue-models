@@ -4,6 +4,8 @@ import VueRequests from 'vue-requests'
 import User from '../demo/user'
 import tenant_data from './tenant_data'
 
+console.log(VueRequests)
+
 Vue.use(VueRequests)
 Vue.use(VueModel)
 
