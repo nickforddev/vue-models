@@ -14,10 +14,10 @@
       <thead>
         <tr>
           <td>
-            <h2>encoded model</h2>
+            <h2>raw user data</h2>
           </td>
           <td>
-            <h2>decoded model</h2>
+            <h2>decoded user model</h2>
           </td>
         </tr>
       </thead>

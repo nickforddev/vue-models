@@ -4,8 +4,6 @@ import VueRequests from 'vue-requests'
 import User from '../demo/user'
 import tenant_data from './tenant_data'
 
-console.log(VueRequests)
-
 Vue.use(VueRequests)
 Vue.use(VueModel)
 
@@ -31,7 +29,6 @@ describe('VueModel basics', () => {
     expect.assertions(1)
     return model.fetch()
       .then((res) => {
-        console.log(model.toJSON(), res)
         expect(model.full_name)
           .toBe('Taco Cat')
       })
@@ -55,6 +52,79 @@ describe('VueModel basics', () => {
   it('should destroy a model', () => {
     expect(model.destroy())
       .toBeInstanceOf(Promise)
+  })
+})
+
+describe('Extended JSON', () => {
+  const user = new User({
+    id: {
+      $oid: '586e6d75b7a7bc5c852c60a5'
+    },
+    created: {
+      $date: '2016-12-16T00:00:00'
+    },
+    updated: '2016-12-16T00:00:00',
+    role: 'admin',
+    first_name: 'Tony',
+    last_name: 'Tiger',
+    email: 'tonytiger@gmail.com',
+    notifications: {
+      alarm: {
+        $date: '2016-12-16T00:00:00'
+      },
+      test: {
+        one: {
+          $date: '2016-12-16T00:00:00'
+        },
+        two: {
+          three: {
+            $date: '2016-12-16T00:00:00'
+          }
+        }
+      }
+    },
+    things: [
+      {
+        id: {
+          $oid: '42356d75b7a7bc5c52c11a90'
+        },
+        created: {
+          $date: '2016-12-16T00:00:00'
+        }
+      },
+      {
+        id: {
+          $oid: '09a11c25c5cb7a7b57d65324"'
+        },
+        created: {
+          $date: '2016-12-16T00:00:00'
+        }
+      }
+    ]
+  })
+  it('should decode extended json ISODate', () => {
+    expect(user.created)
+      .toBe('2016-12-16T00:00:00.000Z')
+  })
+
+  it('should handle regular ISODates', () => {
+    expect(user.updated)
+      .toBe('2016-12-16T00:00:00.000Z')
+  })
+
+  it('should handle nested extended json', () => {
+    expect(user.notifications.alarm)
+      .toBe('2016-12-16T00:00:00.000Z')
+  })
+
+  it('should handle very nested extended json', () => {
+    expect(user.notifications.test.two.three)
+      .toBe('2016-12-16T00:00:00.000Z')
+  })
+
+  it('should process object arrays with extended json properties', () => {
+    expect(user.things[0].id)
+      .toBe('42356d75b7a7bc5c52c11a90')
   })
 })
 

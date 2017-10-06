@@ -3,12 +3,6 @@
   * (c) 2017 Nick Ford
   * @license MIT
   */
-(function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-	typeof define === 'function' && define.amd ? define(['exports'], factory) :
-	(factory((global['vue-models'] = {})));
-}(this, (function (exports) { 'use strict';
-
 var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
 function commonjsRequire () {
@@ -40293,9 +40287,5 @@ var VueModel = function () {
   return VueModel;
 }();
 
-exports['default'] = VueModel;
-exports.Model = Model;
-
-Object.defineProperty(exports, '__esModule', { value: true });
-
-})));
+export { Model };
+export default VueModel;

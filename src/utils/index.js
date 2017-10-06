@@ -103,7 +103,7 @@ const traverse = (data, schema, func) => {
     output = data.map(item => {
       for (let key in item) {
         if (schema.items && key in schema.items) {
-          if ([Object, Array, Function].includes(schema.items[key])) {
+          if ([Object, Array].includes(schema.items[key])) {
             item[key] = traverse(item[key], schema[key], func)
           } else {
             item[key] = func(item[key], schema.items[key])
@@ -162,13 +162,15 @@ export const decodeProperty = (data, schema) => {
 
 // encode model data
 
-export const encodeData = (data, schema) => {
+export const encodeData = (_data, schema) => {
+  const data = _.merge({}, _data)
   return traverse(data, schema, encodeProperty)
 }
 
 // decode model data
 
-export const decodeData = (data, schema) => {
+export const decodeData = (_data, schema) => {
+  const data = _.merge({}, _data)
   return traverse(data, schema, decodeProperty)
 }
 
