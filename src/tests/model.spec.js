@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import VueModel, { Model } from '../../dist/vue-models.esm'
+// import VueModel, { Model } from '../index.esm'
+// console.log(VueModel)
 import VueRequests from 'vue-requests'
 import User from '../demo/user'
 import tenant_data from './tenant_data'
