@@ -1,4 +1,8 @@
-import _ from 'lodash'
+import _some from 'lodash.some'
+import _merge from 'lodash.merge'
+import _reduce from 'lodash.reduce'
+import _isEmpty from 'lodash.isempty'
+import _isEqual from 'lodash.isequal'
 import { Request } from 'vue-requests'
 
 export { Request }
@@ -7,7 +11,7 @@ export { Request }
 
 export function isDef (v) {
   if (v === undefined) return false
-  return !_.some(...v, _.isEmpty)
+  return !_some(...v, _isEmpty)
 }
 
 // get props that changed
@@ -19,18 +23,16 @@ export const getDiff = (oldData, newData) => {
     const key = keys[index]
     output[key] = newData[key]
   }
-  // console.log({output})
   return output
 }
 
 // get keys of changed props
 
 export const getChangedKeys = (oldData, newData) => {
-  const updated = _.merge({}, oldData, newData)
-  const output = _.reduce(oldData, function(result, value, key) {
-    return _.isEqual(value, updated[key]) ? result : result.concat(key)
+  const updated = _merge({}, oldData, newData)
+  const output = _reduce(oldData, function(result, value, key) {
+    return _isEqual(value, updated[key]) ? result : result.concat(key)
   }, [])
-  // console.log({output})
   return output
 }
 
@@ -90,7 +92,7 @@ export const getDefaultsFromSchema = (schema) => {
     }
   }
   const immutable = () => {
-    return _.merge({}, default_attrs)
+    return _merge({}, default_attrs)
   }
   return immutable
 }
@@ -163,14 +165,14 @@ export const decodeProperty = (data, schema) => {
 // encode model data
 
 export const encodeData = (_data, schema) => {
-  const data = _.merge({}, _data)
+  const data = _merge({}, _data)
   return traverse(data, schema, encodeProperty)
 }
 
 // decode model data
 
 export const decodeData = (_data, schema) => {
-  const data = _.merge({}, _data)
+  const data = _merge({}, _data)
   return traverse(data, schema, decodeProperty)
 }
 
@@ -181,7 +183,7 @@ export const modelToJSON = (model) => {
   for (let key in model.$options.computed) {
     computed[key] = model[key]
   }
-  let output = _.merge({}, model.$data, computed)
+  let output = _merge({}, model.$data, computed)
   delete output.errors
   delete output.fields
   return output

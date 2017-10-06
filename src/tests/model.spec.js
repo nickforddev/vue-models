@@ -61,24 +61,24 @@ describe('Extended JSON', () => {
       $oid: '586e6d75b7a7bc5c852c60a5'
     },
     created: {
-      $date: '2016-12-16T00:00:00'
+      $date: '2016-12-16T00:00:00.000Z'
     },
-    updated: '2016-12-16T00:00:00',
+    updated: '2016-12-16T00:00:00.000Z',
     role: 'admin',
     first_name: 'Tony',
     last_name: 'Tiger',
     email: 'tonytiger@gmail.com',
     notifications: {
       alarm: {
-        $date: '2016-12-16T00:00:00'
+        $date: '2016-12-16T00:00:00.000Z'
       },
       test: {
         one: {
-          $date: '2016-12-16T00:00:00'
+          $date: '2016-12-16T00:00:00.000Z'
         },
         two: {
           three: {
-            $date: '2016-12-16T00:00:00'
+            $date: '2016-12-16T00:00:00.000Z'
           }
         }
       }
@@ -89,7 +89,7 @@ describe('Extended JSON', () => {
           $oid: '42356d75b7a7bc5c52c11a90'
         },
         created: {
-          $date: '2016-12-16T00:00:00'
+          $date: '2016-12-16T00:00:00.000Z'
         }
       },
       {
@@ -97,7 +97,7 @@ describe('Extended JSON', () => {
           $oid: '09a11c25c5cb7a7b57d65324"'
         },
         created: {
-          $date: '2016-12-16T00:00:00'
+          $date: '2016-12-16T00:00:00.000Z'
         }
       }
     ]

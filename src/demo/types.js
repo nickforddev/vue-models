@@ -1,5 +1,4 @@
-import _ from 'lodash'
-import moment from 'moment'
+import _get from 'lodash.get'
 
 export class Type {
   constructor(value, key) {
@@ -18,7 +17,7 @@ export class Type {
   }
   getValue(value) {
     return this.key
-      ? _.get(value, this.key) || value
+      ? _get(value, this.key) || value
       : value
   }
   in(value) {
@@ -56,8 +55,8 @@ export class ISODate extends Type {
     return this
   }
   in(value) {
-    const parsed = moment.utc(value)
-    if (parsed.isValid()) {
+    const parsed = new Date(value)
+    if (!isNaN(parsed.getTime())) {
       this.value = value
     } else {
       throw new TypeError(`Invalid date: "${value}"`)
@@ -65,7 +64,7 @@ export class ISODate extends Type {
   }
   out() {
     return this.value
-      ? moment.utc(this.value).toISOString()
+      ? new Date(this.value).toISOString()
       : undefined
   }
 }

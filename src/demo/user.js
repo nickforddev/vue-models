@@ -1,6 +1,8 @@
-// import _ from 'lodash'
-import { Model } from '../index'
+import { Model } from '../index.esm'
+// import { Model } from '../../dist/vue-models.esm'
 import { ObjectId, ISODate } from './types'
+
+// console.log(Model)
 
 const defaults = {
   name: 'user',

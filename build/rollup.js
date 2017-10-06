@@ -50,7 +50,7 @@ async function main () {
 async function esm () {
   console.log(chalk.cyan('Generating esm builds...'));
   let bundle = await Rollup.rollup({
-    input: 'src/index.js',
+    input: 'src/index.esm.js',
     plugins: [
       replace({ __VERSION__: version }),
       nodeResolve(),

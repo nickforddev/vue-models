@@ -1,11 +1,21 @@
 import Vue from 'vue'
-import _ from 'lodash'
+import _get from 'lodash.get'
+import _merge from 'lodash.merge'
+import _reduce from 'lodash.reduce'
+import _isEmpty from 'lodash.isempty'
 import { ISODate } from './demo/types'
 import * as utils from './utils'
 
-// const { Request } = utils
+// let Vue
 
-export default class Model {
+// export function init (_Vue) {
+//   Vue = _Vue
+// }
+
+class Model {
+  // static init (_Vue) {
+  //   Vue = _Vue
+  // }
   static schema() {
     return {
       id: String,
@@ -19,8 +29,8 @@ export default class Model {
 
     // make sure options is an array and then merge items
     let _options = !(options instanceof Array) ? [ options ] : options
-    _options = _.reduce(_options, (sum, n) => {
-      return _.merge({}, sum, n)
+    _options = _reduce(_options, (sum, n) => {
+      return _merge({}, sum, n)
     })
 
     const default_options = {
@@ -48,7 +58,7 @@ export default class Model {
           return url
         },
         $request() {
-          return _.get(this._vm, '$request') || utils.Request
+          return _get(this._vm, '$request') || utils.Request
         }
       },
       data() {
@@ -70,15 +80,14 @@ export default class Model {
           const _options = {
             path: ''
           }
-          _.merge(_options, options)
+          _merge(_options, options)
           const changed = utils.getDiff(this.$data, _body)
-          if (_.isEmpty(changed)) {
+          if (_isEmpty(changed)) {
             return Promise.resolve()
           }
           const body = this.encode(changed)
           const method = this.isNew ? 'POST' : 'PUT'
           const path = _options.path ? '/' + _options.path : ''
-          // const req = new Request(this.url + path, {
           const req = this.$request(this.url + path, {
             method,
             body
@@ -89,9 +98,8 @@ export default class Model {
           return req
         },
         set(data) {
-          // console.log('set', data)
           const data_decoded = this.decode(data)
-          _.merge(this, data_decoded)
+          _merge(this, data_decoded)
           return this
         },
         reset(defaults) {
@@ -112,8 +120,10 @@ export default class Model {
       }
     }
 
-    const model_options = _.merge({}, default_options, _options)
+    const model_options = _merge({}, default_options, _options)
 
     return new Vue(model_options)
   }
 }
+
+export { Model }

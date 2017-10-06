@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import _get from 'lodash.get'
 import { isDef } from './utils'
 
 const makeComputedProp = (vm, key) => {
@@ -55,7 +55,7 @@ export default (Vue) => ({
   beforeDestroy() {
     if (isDef(this.$models)) {
       for (let key in this.$models) {
-        if (!_.get(this.$models[key], '$options.persist')) {
+        if (!_get(this.$models[key], '$options.persist')) {
           this.$models[key].reset()
         }
       }

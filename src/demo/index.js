@@ -1,8 +1,9 @@
 import Vue from 'vue'
-import App from './app.vue'
+import App from './demo.vue'
 
-import VueModels from '../../dist/vue-models.esm'
-// import VueModels from '../index'
+import VueModels from '../index.esm'
+// import VueModels from '../../dist/vue-models'
+
 Vue.config.productionTip = false
 
 Vue.use(VueModels)
