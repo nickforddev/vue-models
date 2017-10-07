@@ -9,11 +9,9 @@ let Vue
 
 class Model {
   static init (_Vue) {
-    if (process.env.NODE_ENV === 'test') {
-      Vue = require('vue')
-    } else {
-      Vue = _Vue
-    }
+    Vue = process.env.NODE_ENV === 'test'
+      ? require('vue')
+      : _Vue
   }
   static schema() {
     return {
