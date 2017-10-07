@@ -1,5 +1,5 @@
 import _some from 'lodash.some'
-import _merge from 'lodash.merge'
+import _merge from 'deep-extend'
 import _reduce from 'lodash.reduce'
 import _isEmpty from 'lodash.isempty'
 import _isEqual from 'lodash.isequal'
@@ -183,7 +183,11 @@ export const modelToJSON = (model) => {
   for (let key in model.$options.computed) {
     computed[key] = model[key]
   }
-  let output = _merge({}, model.$data, computed)
+  let data = {}
+  for (let key in model.schema()) {
+    data[key] = model[key]
+  }
+  let output = _merge({}, data, computed)
   delete output.errors
   delete output.fields
   return output
@@ -191,9 +195,9 @@ export const modelToJSON = (model) => {
 
 // reset collection or model state
 
-export const resetState = (state, defaults) => {
+export const resetState = (model, defaults) => {
   Object.keys(defaults).forEach(key => {
-    state[key] = defaults[key]
+    model[key] = defaults[key]
   })
 }
 

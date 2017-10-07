@@ -55,58 +55,60 @@
 import card from './card'
 import User from './user'
 
-const defaults = {
-  id: {
-    $oid: '586e6d75b7a7bc5c852c60a5'
-  },
-  created: {
-    $date: '2016-12-16T00:00:00'
-  },
-  updated: '2016-12-16T00:00:00',
-  role: 'admin',
-  first_name: 'Tony',
-  last_name: 'Tiger',
-  email: 'tonytiger@gmail.com',
-  notifications: {
-    alarm: {
+const defaults = () => {
+  return {
+    id: {
+      $oid: '586e6d75b7a7bc5c852c60a5'
+    },
+    created: {
       $date: '2016-12-16T00:00:00'
     },
-    test: {
-      one: {
+    updated: '2016-12-16T00:00:00',
+    role: 'admin',
+    first_name: 'Tony',
+    last_name: 'Tiger',
+    email: 'tonytiger@gmail.com',
+    notifications: {
+      alarm: {
         $date: '2016-12-16T00:00:00'
       },
-      two: {
-        three: {
+      test: {
+        one: {
+          $date: '2016-12-16T00:00:00'
+        },
+        two: {
+          three: {
+            $date: '2016-12-16T00:00:00'
+          }
+        }
+      }
+    },
+    things: [
+      {
+        id: {
+          $oid: '42356d75b7a7bc5c52c11a90'
+        },
+        created: {
+          $date: '2016-12-16T00:00:00'
+        }
+      },
+      {
+        id: {
+          $oid: '09a11c25c5cb7a7b57d65324'
+        },
+        created: {
           $date: '2016-12-16T00:00:00'
         }
       }
-    }
-  },
-  things: [
-    {
-      id: {
-        $oid: '42356d75b7a7bc5c52c11a90'
-      },
-      created: {
-        $date: '2016-12-16T00:00:00'
-      }
-    },
-    {
-      id: {
-        $oid: '09a11c25c5cb7a7b57d65324'
-      },
-      created: {
-        $date: '2016-12-16T00:00:00'
-      }
-    }
-  ]
+    ]
+  }
 }
 
 export default {
   name: 'app',
   models: {
     user() {
-      return new User(defaults)
+      return new User(defaults())
     }
   },
   components: {
@@ -119,7 +121,7 @@ export default {
   },
   methods: {
     setUser() {
-      this.$user = defaults
+      this.$user = defaults()
     },
     resetUser() {
       this.$user.reset()

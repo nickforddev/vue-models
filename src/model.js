@@ -1,6 +1,7 @@
 // import Vue from 'vue'
 import _get from 'lodash.get'
-import _merge from 'lodash.merge'
+// import _merge from 'lodash.merge'
+import _merge from 'deep-extend'
 import _reduce from 'lodash.reduce'
 import _isEmpty from 'lodash.isempty'
 import { ISODate } from './demo/types'
@@ -14,9 +15,15 @@ class Model {
   }
   static schema() {
     return {
-      id: String,
-      created: ISODate,
-      updated: ISODate
+      id: {
+        type: String
+      },
+      created: {
+        type: ISODate
+      },
+      updated: {
+        type: ISODate
+      }
     }
   }
   constructor(attributes = {}, options = {}) {
@@ -33,6 +40,9 @@ class Model {
       name: 'model',
       created() {
         this.set(attributes)
+      },
+      data() {
+        return default_attributes()
       },
       computed: {
         basePath() {
@@ -56,9 +66,6 @@ class Model {
         $request() {
           return _get(this._vm, '$request') || utils.Request
         }
-      },
-      data() {
-        return default_attributes()
       },
       methods: {
         async fetch() {
@@ -93,21 +100,28 @@ class Model {
           })
           return req
         },
+        data() {
+          let data = {}
+          for (let key in schema) {
+            data[key] = this[key]
+          }
+          return _merge({}, data)
+        },
         set(data) {
           const data_decoded = this.decode(data)
           _merge(this, data_decoded)
           return this
         },
-        reset(defaults) {
-          return utils.resetState(this.$data, default_attributes())
+        reset() {
+          return utils.resetState(this, default_attributes())
         },
         toJSON() {
           return utils.modelToJSON(this)
         },
-        decode(data = this.$data) {
+        decode(data = this.data()) {
           return utils.decodeData(utils.removeUnderscores(data), schema)
         },
-        encode(data = this.$data) {
+        encode(data = this.data()) {
           return utils.addUnderscores(utils.encodeData(data, schema))
         },
         schema() {

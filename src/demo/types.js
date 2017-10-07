@@ -47,6 +47,9 @@ export class ObjectId extends Type {
     super(value, '$oid')
     return this
   }
+  out() {
+    return this.value || ''
+  }
 }
 
 export class ISODate extends Type {
