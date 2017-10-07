@@ -53,7 +53,7 @@ class Model {
           return `${this.basePath}/${this.id}`
         },
         isNew() {
-          return this.id === undefined
+          return [undefined, ''].includes(this.id)
         },
         url() {
           const url = _options.url
@@ -74,7 +74,6 @@ class Model {
           return response
         },
         destroy() {
-          // return new Request(this.urlRoot, {
           return this.$request(this.urlRoot, {
             method: 'DELETE'
           })
