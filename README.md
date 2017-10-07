@@ -15,7 +15,7 @@ npm install vue-models
 
 ## Demo
 
-Clone the repository and run `npm start` or view a live demo [here](https://cdn.rawgit.com/nickforddesign/vue-models/a8e24612/dist/index.html).
+Clone the repository and run `npm start` or view a live demo [here](https://cdn.rawgit.com/nickforddesign/vue-models/58e12f10/dist/index.html).
 
 ## Setup
 
