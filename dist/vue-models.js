@@ -1,5 +1,5 @@
 /**
-  * vue-models v1.0.3
+  * vue-models v1.1.0
   * (c) 2017 Nick Ford
   * @license MIT
   */
@@ -10829,9 +10829,9 @@ var microtask = _microtask();
 
 var PROMISE = 'Promise';
 var TypeError$1 = _global$2.TypeError;
-var process = _global$2.process;
+var process$1$1 = _global$2.process;
 var $Promise = _global$2[PROMISE];
-var isNode = _classof$2(process) == 'process';
+var isNode = _classof$2(process$1$1) == 'process';
 var empty = function () { /* empty */ };
 var Internal;
 var newGenericPromiseCapability;
@@ -10906,7 +10906,7 @@ var onUnhandled = function (promise) {
     if (unhandled) {
       result = _perform(function () {
         if (isNode) {
-          process.emit('unhandledRejection', value, promise);
+          process$1$1.emit('unhandledRejection', value, promise);
         } else if (handler = _global$2.onunhandledrejection) {
           handler({ promise: promise, reason: value });
         } else if ((console = _global$2.console) && console.error) {
@@ -10933,7 +10933,7 @@ var onHandleUnhandled = function (promise) {
   task.call(_global$2, function () {
     var handler;
     if (isNode) {
-      process.emit('rejectionHandled', promise);
+      process$1$1.emit('rejectionHandled', promise);
     } else if (handler = _global$2.onrejectionhandled) {
       handler({ promise: promise, reason: promise._v });
     }
@@ -11005,7 +11005,7 @@ if (!USE_NATIVE) {
       var reaction = newPromiseCapability(_speciesConstructor(this, $Promise));
       reaction.ok = typeof onFulfilled == 'function' ? onFulfilled : true;
       reaction.fail = typeof onRejected == 'function' && onRejected;
-      reaction.domain = isNode ? process.domain : undefined;
+      reaction.domain = isNode ? process$1$1.domain : undefined;
       this._c.push(reaction);
       if (this._a) this._a.push(reaction);
       if (this._s) notify(this, false);
@@ -17333,7 +17333,7 @@ var _invoke$1 = function (fn, args, that) {
   } return fn.apply(that, args);
 };
 
-var process$2$1 = _global.process;
+var process$3 = _global.process;
 var setTask$1 = _global.setImmediate;
 var clearTask$1 = _global.clearImmediate;
 var MessageChannel$1 = _global.MessageChannel;
@@ -17373,9 +17373,9 @@ if (!setTask$1 || !clearTask$1) {
     delete queue$1[id];
   };
   // Node.js 0.8-
-  if (_cof(process$2$1) == 'process') {
+  if (_cof(process$3) == 'process') {
     defer$1 = function (id) {
-      process$2$1.nextTick(_ctx(run$1, id, 1));
+      process$3.nextTick(_ctx(run$1, id, 1));
     };
   // Sphere (JS game engine) Dispatch API
   } else if (Dispatch$1 && Dispatch$1.now) {
@@ -17417,16 +17417,16 @@ var _task$1 = {
 
 var macrotask$1 = _task$1.set;
 var Observer$1 = _global.MutationObserver || _global.WebKitMutationObserver;
-var process$3 = _global.process;
+var process$4 = _global.process;
 var Promise$1$1 = _global.Promise;
-var isNode$2 = _cof(process$3) == 'process';
+var isNode$2 = _cof(process$4) == 'process';
 
 var _microtask$1 = function () {
   var head, last, notify;
 
   var flush = function () {
     var parent, fn;
-    if (isNode$2 && (parent = process$3.domain)) parent.exit();
+    if (isNode$2 && (parent = process$4.domain)) parent.exit();
     while (head) {
       fn = head.fn;
       head = head.next;
@@ -17444,7 +17444,7 @@ var _microtask$1 = function () {
   // Node.js
   if (isNode$2) {
     notify = function () {
-      process$3.nextTick(flush);
+      process$4.nextTick(flush);
     };
   // browsers with MutationObserver
   } else if (Observer$1) {
@@ -17563,9 +17563,9 @@ var microtask$1 = _microtask$1();
 
 var PROMISE$1 = 'Promise';
 var TypeError$1$1 = _global.TypeError;
-var process$1$1 = _global.process;
+var process$2$1 = _global.process;
 var $Promise$1 = _global[PROMISE$1];
-var isNode$1$1 = _classof(process$1$1) == 'process';
+var isNode$1$1 = _classof(process$2$1) == 'process';
 var empty$1 = function () { /* empty */ };
 var Internal$1;
 var newGenericPromiseCapability$1;
@@ -17640,7 +17640,7 @@ var onUnhandled$1 = function (promise) {
     if (unhandled) {
       result = _perform$1(function () {
         if (isNode$1$1) {
-          process$1$1.emit('unhandledRejection', value, promise);
+          process$2$1.emit('unhandledRejection', value, promise);
         } else if (handler = _global.onunhandledrejection) {
           handler({ promise: promise, reason: value });
         } else if ((console = _global.console) && console.error) {
@@ -17667,7 +17667,7 @@ var onHandleUnhandled$1 = function (promise) {
   task$1.call(_global, function () {
     var handler;
     if (isNode$1$1) {
-      process$1$1.emit('rejectionHandled', promise);
+      process$2$1.emit('rejectionHandled', promise);
     } else if (handler = _global.onrejectionhandled) {
       handler({ promise: promise, reason: promise._v });
     }
@@ -17739,7 +17739,7 @@ if (!USE_NATIVE$1$1) {
       var reaction = newPromiseCapability$1(_speciesConstructor$1(this, $Promise$1));
       reaction.ok = typeof onFulfilled == 'function' ? onFulfilled : true;
       reaction.fail = typeof onRejected == 'function' && onRejected;
-      reaction.domain = isNode$1$1 ? process$1$1.domain : undefined;
+      reaction.domain = isNode$1$1 ? process$2$1.domain : undefined;
       this._c.push(reaction);
       if (this._a) this._a.push(reaction);
       if (this._s) notify$1(this, false);
@@ -19356,15 +19356,13 @@ var ISODate = function (_Type2) {
   return ISODate;
 }(Type);
 
-// import Vue from 'vue'
-// import _merge from 'lodash.merge'
 var Vue = void 0;
 
 var Model = function () {
   _createClass(Model, null, [{
     key: 'init',
     value: function init(_Vue) {
-      Vue = _Vue;
+      Vue = process.env.NODE_ENV === 'test' ? require('vue') : _Vue;
     }
   }, {
     key: 'schema',

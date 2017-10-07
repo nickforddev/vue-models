@@ -1,6 +1,4 @@
-// import Vue from 'vue'
 import _get from 'lodash.get'
-// import _merge from 'lodash.merge'
 import _merge from 'deep-extend'
 import _reduce from 'lodash.reduce'
 import _isEmpty from 'lodash.isempty'
@@ -11,7 +9,9 @@ let Vue
 
 class Model {
   static init (_Vue) {
-    Vue = _Vue
+    Vue = process.env.NODE_ENV === 'test'
+      ? require('vue')
+      : _Vue
   }
   static schema() {
     return {
