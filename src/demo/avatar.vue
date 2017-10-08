@@ -1,5 +1,5 @@
 <template>
-  <div class="avatar">
+  <div class="avatar" :style="style">
     <svg viewBox="0 0 220 220">
       <text transform="matrix(1 0 0 1 110 144)" text-anchor="middle">
         <slot></slot>
@@ -13,7 +13,14 @@
 <script>
 export default {
   name: 'avatar',
-  props: ['initials']
+  props: ['initials', 'color'],
+  computed: {
+    style() {
+      return {
+        background: this.color
+      }
+    }
+  }
 }
 </script>
 

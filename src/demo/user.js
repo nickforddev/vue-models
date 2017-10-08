@@ -53,6 +53,9 @@ export default class User extends Model {
       role: {
         type: String
       },
+      avatar_color: {
+        type: String
+      },
       notifications: {
         type: Object,
         properties: {
