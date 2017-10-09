@@ -19538,6 +19538,7 @@ var VueModel = function () {
 }();
 
 VueModel.Model = Model;
+VueModel.Type = Type;
 
 return VueModel;
 

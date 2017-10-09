@@ -1,6 +1,6 @@
 import makeMixin from './mixin'
 import { Model } from './model'
-import { Type } from './type'
+import Type from './type'
 
 export default class VueModel {
   static install(Vue, options) {

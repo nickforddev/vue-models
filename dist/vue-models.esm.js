@@ -19531,5 +19531,5 @@ var VueModel = function () {
   return VueModel;
 }();
 
-export { Model };
+export { Model, Type };
 export default VueModel;
