@@ -4,8 +4,7 @@
     <div v-else>
       <div class="card">
         <div class="row">
-          <!-- <div class="initials">{{ $user.initials }}</div> -->
-          <avatar>{{ $user.initials }}</avatar>
+          <avatar :color="$user.avatar_color">{{ $user.initials }}</avatar>
           <div class="content">
             <div class="meta">
               <div class="name">{{ $user.full_name}}</div>
@@ -50,12 +49,14 @@ export default {
   position: relative;
   display: table;
   width: 100%;
-  max-width: 600px;
-  min-width: 400px;
+  max-width: 400px;
+  min-width: 300px;
   border-radius: 6px;
   background: #efefef;
   box-sizing: border-box;
   box-shadow: 0 2px 3px rgba(0,0,0, 0.2);
+  border-spacing: 0;
+  border-collapse: separate;
   overflow: hidden;
 }
 .row {
@@ -70,7 +71,6 @@ export default {
   display: table-cell;
   /* font-size: 14vw; */
   width: 25%;
-  background: teal;
   color: white;
   padding: 0 !important;
 }

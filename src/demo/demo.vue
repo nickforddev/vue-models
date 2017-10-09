@@ -1,31 +1,54 @@
 <template>
   <div id="app">
     <h1>vue-models</h1>
-    <p>
-      Below is a demonstration of using custom types in a model schema to decode 
-      <a href="https://docs.mongodb.com/manual/reference/mongodb-extended-json/" target="_blank">extended json</a> 
-      from MongoDB. The data is flattened for use client-side, and then re-encoded
-      to extended json when saving, or as otherwise needed.
-    </p>
-    <div v-if="$user.role">
-      <button @click="resetUser">Clear Model</button>
-    </div>
-    <div v-else>
-      <button @click="setUser">Populate Model</button>
-    </div>
+
+    <table class="top">
+      <!-- <thead>
+        <tr>
+          <td>Card</td>
+          <td>Data</td>
+        </tr>
+      </thead> -->
+      <tbody>
+        <tr>
+          <td width="75%">
+            <p>
+              Below is an example of binding a model to a Vue instance. Use the buttons
+              to mutate the user data in the model, and the user card will update.
+              Below that is an example of using custom types in a model schema to decode 
+              <a href="https://docs.mongodb.com/manual/reference/mongodb-extended-json/" target="_blank">extended json</a> 
+              from MongoDB. The data is flattened for use client-side, and then re-encoded
+              to extended json when saving, or as otherwise needed.
+            </p>
+          </td>
+          <td>
+            <div v-if="$user.role">
+              <button @click="resetUser">Clear Model</button>
+              <button @click="setUser('one')" :disabled="current_user === 'one'">Set User One</button>
+              <button @click="setUser('two')" :disabled="current_user === 'two'">Set User Two</button>
+              <button @click="setUser('three')" :disabled="current_user === 'three'">Set User Three</button>
+            </div>
+            <div v-else>
+              <button @click="setUser()">Populate Model</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
 
     <h2>Vue Binding</h2>
 
     <card :model="$user" />
 
-    <div v-if="$user.things.length">
+    <!-- <div v-if="$user.things.length">
       <h2>$user.things</h2>
       <div class="item" v-for="(item, index) in $user.things" :key="index">
         {{ item }}
       </div>
-    </div>
+    </div> -->
 
     <h2>Schema Transformation</h2>
+
     <table>
       <thead>
         <tr>
@@ -55,64 +78,25 @@
 import card from './card'
 import User from './user'
 
-const defaults = () => {
-  return {
-    id: {
-      $oid: '586e6d75b7a7bc5c852c60a5'
-    },
-    created: {
-      $date: '2016-12-16T00:00:00'
-    },
-    updated: '2016-12-16T00:00:00',
-    role: 'admin',
-    first_name: 'Tony',
-    last_name: 'Tiger',
-    email: 'tonytiger@gmail.com',
-    notifications: {
-      alarm: {
-        $date: '2016-12-16T00:00:00'
-      },
-      test: {
-        one: {
-          $date: '2016-12-16T00:00:00'
-        },
-        two: {
-          three: {
-            $date: '2016-12-16T00:00:00'
-          }
-        }
-      }
-    },
-    things: [
-      {
-        id: {
-          $oid: '42356d75b7a7bc5c52c11a90'
-        },
-        created: {
-          $date: '2016-12-16T00:00:00'
-        }
-      },
-      {
-        id: {
-          $oid: '09a11c25c5cb7a7b57d65324'
-        },
-        created: {
-          $date: '2016-12-16T00:00:00'
-        }
-      }
-    ]
-  }
-}
+import users from './users_data'
 
 export default {
   name: 'app',
   models: {
     user() {
-      return new User(defaults())
+      return new User()
     }
   },
   components: {
     card
+  },
+  created() {
+    this.setUser()
+  },
+  data() {
+    return {
+      current_user: undefined
+    }
   },
   computed: {
     encoded() {
@@ -120,8 +104,9 @@ export default {
     }
   },
   methods: {
-    setUser() {
-      this.$user = defaults()
+    setUser(number = 'one') {
+      this.current_user = number
+      this.$user = users()[number]
     },
     resetUser() {
       this.$user.reset()
@@ -144,6 +129,11 @@ export default {
   box-sizing: border-box;
 }
 
+p {
+  margin: 0;
+  padding-right: 40px;
+}
+
 table {
   width: 100%;
   margin-top: 30px;
@@ -156,5 +146,14 @@ table tbody {
 td {
   padding: 0 12px;
   border: 1px solid #ccc;
+}
+
+.top {
+  padding: 0;
+}
+
+.top td {
+  padding: 0;
+  border: 0;
 }
 </style>
