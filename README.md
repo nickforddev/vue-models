@@ -42,12 +42,15 @@ const defaults = {
   }
 }
 
-export default class User extends Model {
+export class User extends Model {
   static schema() {
     return {
-      id: String,
-      first_name: String,
-      last_name: String
+      first_name: {
+        type: String
+      },
+      last_name: {
+        type: String
+      }
     }
   }
   constructor(attributes, options) {
@@ -129,6 +132,35 @@ NOTE: By default, models are reset when the parent component is destroyed. To di
 ## Schema
 
 Model classes use a static schema method to defined the initial data properties for the Vue instance. The schema format is heavily influenced by JSON Schema, with few differences. JSON Schema is frequently used for validation, while `vue-model` uses a schema to define initial state, and to transform data. Data can be transformed by creating custom type classes that mimic the behavior of the native constructors. Run the demo for a comprehensive example of data transformation that handles extended JSON ObjectIds and ISODates.
+
+## Types
+
+Below is an example of creating a custom type for converting MongoDB entended json ISODates to friendlier locale strings. The MongoDB date key `$date` is passed to the parent class, `Type`, so that the `ISODate` class knows where to look for the value. The `in` method defined how the data should be validated and processed before setting the state, and the `out` method defines how the data should be transformed before encoding or saving the model.
+
+```js
+import { Type } from 'vue-models'
+
+export class ISODate extends Type {
+  constructor(value) {
+    super(value, '$date')
+    return this
+  }
+  in(value) {
+    const parsed = new Date(value)
+    if (!isNaN(parsed.getTime())) {
+      this.value = value
+    } else {
+      throw new TypeError(`Invalid date: "${value}"`)
+    }
+  }
+  out() {
+    return this.value
+      ? new Date(this.value).toLocaleString()
+      : undefined
+  }
+}
+
+```
 
 ## Requests
 
