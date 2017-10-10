@@ -1,5 +1,5 @@
 /**
-  * vue-models v1.1.0
+  * vue-models v1.1.1
   * (c) 2017 Nick Ford
   * @license MIT
   */
@@ -17045,7 +17045,7 @@ var getDefaultsFromSchema = function getDefaultsFromSchema(schema) {
       value = 'default' in attr ? attr.default : '';
       var output = void 0;
       if (_constructor === Object) {
-        output = {};
+        output = attr.properties ? getDefaultsFromSchema(attr.properties)() : {};
       } else if (_constructor === Array) {
         output = [];
       } else {
