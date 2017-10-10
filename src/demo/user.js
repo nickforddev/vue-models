@@ -81,7 +81,12 @@ export default class User extends Model {
         }
       },
       status: {
-        type: Object
+        type: Object,
+        properties: {
+          one: {
+            type: Object
+          }
+        }
       },
       things: {
         type: Array,

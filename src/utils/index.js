@@ -80,7 +80,9 @@ export const getDefaultsFromSchema = (schema) => {
         : ''
       let output
       if (constructor === Object) {
-        output = {}
+        output = attr.properties
+          ? getDefaultsFromSchema(attr.properties)()
+          : {}
       } else if (constructor === Array) {
         output = []
       } else {
