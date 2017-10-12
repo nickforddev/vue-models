@@ -1,4 +1,4 @@
-import _get from 'lodash.get'
+import { path } from 'ramda'
 import { isDef } from './utils'
 
 const makeComputedProp = (vm, key) => {
@@ -55,7 +55,7 @@ export default (Vue) => ({
   beforeDestroy() {
     if (isDef(this.$models)) {
       for (let key in this.$models) {
-        if (!_get(this.$models[key], '$options.persist')) {
+        if (!path(['$options', 'persist'], this.$models[key])) {
           this.$models[key].reset()
         }
       }

@@ -1,7 +1,9 @@
-import _get from 'lodash.get'
-import _merge from 'deep-extend'
-import _reduce from 'lodash.reduce'
-import _isEmpty from 'lodash.isempty'
+import {
+  path,
+  mergeDeepRight,
+  isEmpty
+} from 'ramda'
+
 import { ISODate } from './demo/types'
 import * as utils from './utils'
 
@@ -26,15 +28,14 @@ class Model {
       }
     }
   }
+  static defaults() {
+    return {}
+  }
   constructor(attributes = {}, options = {}) {
     const schema = this.constructor.schema()
     const default_attributes = utils.getDefaultsFromSchema(schema)
 
-    // make sure options is an array and then merge items
-    let _options = !(options instanceof Array) ? [ options ] : options
-    _options = _reduce(_options, (sum, n) => {
-      return _merge({}, sum, n)
-    })
+    const _options = mergeDeepRight(this.constructor.defaults(), options)
 
     const default_options = {
       name: 'model',
@@ -64,7 +65,7 @@ class Model {
           return url
         },
         $request() {
-          return _get(this._vm, '$request') || utils.Request
+          return path(['$request'], this._vm) || utils.Request
         }
       },
       methods: {
@@ -78,13 +79,13 @@ class Model {
             method: 'DELETE'
           })
         },
-        save(_body, options) {
-          const _options = {
+        save(_body, options = {}) {
+          let _options = {
             path: ''
           }
-          _merge(_options, options)
+          _options = mergeDeepRight(_options, options)
           const changed = utils.getDiff(this.$data, _body)
-          if (_isEmpty(changed)) {
+          if (isEmpty(changed)) {
             return Promise.resolve()
           }
           const body = this.encode(changed)
@@ -104,11 +105,14 @@ class Model {
           for (let key in schema) {
             data[key] = this[key]
           }
-          return _merge({}, data)
+          return mergeDeepRight({}, data)
         },
         set(data) {
           const data_decoded = this.decode(data)
-          _merge(this, data_decoded)
+          console.log({data_decoded})
+          for (let key in data_decoded) {
+            this[key] = data_decoded[key]
+          }
           return this
         },
         reset() {
@@ -129,7 +133,7 @@ class Model {
       }
     }
 
-    const model_options = _merge({}, default_options, _options)
+    const model_options = mergeDeepRight(default_options, _options)
 
     return new Vue(model_options)
   }

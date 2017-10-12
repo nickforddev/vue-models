@@ -6,6 +6,7 @@ const babel = require('rollup-plugin-babel');
 const nodeResolve = require('rollup-plugin-node-resolve');
 const commonjs = require('rollup-plugin-commonjs');
 const replace = require('rollup-plugin-replace');
+const cleanup = require('rollup-plugin-cleanup');
 const chalk = require('chalk');
 const version = require('../package.json').version;
 
@@ -22,7 +23,8 @@ async function main () {
       babel({
         exclude: 'node_modules/**',
         runtimeHelpers: true
-      })
+      }),
+      cleanup()
     ],
   });
 
@@ -58,7 +60,8 @@ async function esm () {
       babel({
         exclude: 'node_modules/**',
         runtimeHelpers: true
-      })
+      }),
+      cleanup()
     ],
   });
 

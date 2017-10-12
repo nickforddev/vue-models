@@ -33,16 +33,17 @@ The Model class returns a Vue instance with some default helper methods and comp
 ```js
 import { Model } from 'vue-models'
 
-const defaults = {
-  name: 'user',
-  computed: {
-    full_name() {
-      return `${this.first_name} ${this.last_name}`
+export class User extends Model {
+  static defaults() {
+    return {
+      name: 'user',
+      computed: {
+        full_name() {
+          return `${this.first_name} ${this.last_name}`
+        }
+      }
     }
   }
-}
-
-export class User extends Model {
   static schema() {
     return {
       first_name: {
@@ -53,15 +54,13 @@ export class User extends Model {
       }
     }
   }
-  constructor(attributes, options) {
-    super(attributes, [defaults, options])
-  }
 }
 
 ```
 
 ```js
 import UserModel from './models/user'
+
 const user = new UserModel({
   first_name: 'Jane',
   last_name: 'Doe'

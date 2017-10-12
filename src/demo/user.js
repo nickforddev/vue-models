@@ -2,31 +2,32 @@ import { Model } from '../index.esm'
 // import { Model } from '../../dist/vue-models.esm'
 import { ObjectId, ISODate } from './types'
 
-const defaults = {
-  name: 'user',
-  computed: {
-    basePath() {
-      if (this.role) {
-        const basePath = this.$options.basePath
-        return basePath || this.role + 's'
-      } else {
-        return ''
+export default class User extends Model {
+  static defaults() {
+    return {
+      name: 'user',
+      computed: {
+        basePath() {
+          if (this.role) {
+            const basePath = this.$options.basePath
+            return basePath || this.role + 's'
+          } else {
+            return ''
+          }
+        },
+        full_name() {
+          return this.role
+            ? `${this.first_name} ${this.last_name}`
+            : ``
+        },
+        initials() {
+          return this.role
+            ? `${this.first_name[0]}${this.last_name[0]}`.toUpperCase()
+            : ``
+        }
       }
-    },
-    full_name() {
-      return this.role
-        ? `${this.first_name} ${this.last_name}`
-        : ``
-    },
-    initials() {
-      return this.role
-        ? `${this.first_name[0]}${this.last_name[0]}`.toUpperCase()
-        : ``
     }
   }
-}
-
-export default class User extends Model {
   static schema() {
     return {
       id: {
@@ -100,8 +101,5 @@ export default class User extends Model {
         }
       }
     }
-  }
-  constructor(attributes, options) {
-    super(attributes, [defaults, options])
   }
 }

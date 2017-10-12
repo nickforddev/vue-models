@@ -1,4 +1,4 @@
-import _get from 'lodash.get'
+import { path } from 'ramda'
 
 export default class Type {
   constructor(value, key) {
@@ -16,9 +16,11 @@ export default class Type {
     return this.out()
   }
   getValue(value) {
-    return this.key
-      ? _get(value, this.key) || value
+    const output = this.key
+      ? path([this.key], value) || value
       : value
+    // console.log({output})
+    return output
   }
   in(value) {
     this.value = value

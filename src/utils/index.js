@@ -1,17 +1,19 @@
-import _some from 'lodash.some'
-import _merge from 'deep-extend'
-import _reduce from 'lodash.reduce'
-import _isEmpty from 'lodash.isempty'
-import _isEqual from 'lodash.isequal'
-import { Request } from 'vue-requests'
+import {
+  mergeDeepRight,
+  clone,
+  reduce,
+  isEmpty,
+  equals
+} from 'ramda'
 
+import { Request } from 'vue-requests'
 export { Request }
 
 // is property defined
 
-export function isDef (v) {
-  if (v === undefined) return false
-  return !_some(...v, _isEmpty)
+export function isDef (obj) {
+  if (obj === undefined) return false
+  return !isEmpty(obj)
 }
 
 // get props that changed
@@ -29,10 +31,10 @@ export const getDiff = (oldData, newData) => {
 // get keys of changed props
 
 export const getChangedKeys = (oldData, newData) => {
-  const updated = _merge({}, oldData, newData)
-  const output = _reduce(oldData, function(result, value, key) {
-    return _isEqual(value, updated[key]) ? result : result.concat(key)
-  }, [])
+  const updated = mergeDeepRight(oldData, newData)
+  const output = reduce((result, key, index) => {
+    return equals(updated[key], oldData[key]) ? result : result.concat(key)
+  }, [], Object.keys(oldData))
   return output
 }
 
@@ -94,7 +96,7 @@ export const getDefaultsFromSchema = (schema) => {
     }
   }
   const immutable = () => {
-    return _merge({}, default_attrs)
+    return mergeDeepRight({}, default_attrs)
   }
   return immutable
 }
@@ -110,6 +112,7 @@ const traverse = (data, schema, func) => {
           if ([Object, Array].includes(schema.items[key])) {
             item[key] = traverse(item[key], schema[key], func)
           } else {
+            console.log('found an iterable custom type', func(item[key], schema.items[key]))
             item[key] = func(item[key], schema.items[key])
           }
         }
@@ -167,14 +170,14 @@ export const decodeProperty = (data, schema) => {
 // encode model data
 
 export const encodeData = (_data, schema) => {
-  const data = _merge({}, _data)
+  const data = clone(_data)
   return traverse(data, schema, encodeProperty)
 }
 
 // decode model data
 
 export const decodeData = (_data, schema) => {
-  const data = _merge({}, _data)
+  const data = clone(_data)
   return traverse(data, schema, decodeProperty)
 }
 
@@ -189,7 +192,7 @@ export const modelToJSON = (model) => {
   for (let key in model.schema()) {
     data[key] = model[key]
   }
-  let output = _merge({}, data, computed)
+  let output = mergeDeepRight(data, computed)
   delete output.errors
   delete output.fields
   return output
