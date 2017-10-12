@@ -19,7 +19,6 @@ export default class Type {
     const output = this.key
       ? path([this.key], value) || value
       : value
-    // console.log({output})
     return output
   }
   in(value) {

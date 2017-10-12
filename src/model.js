@@ -109,7 +109,6 @@ class Model {
         },
         set(data) {
           const data_decoded = this.decode(data)
-          console.log({data_decoded})
           for (let key in data_decoded) {
             this[key] = data_decoded[key]
           }
