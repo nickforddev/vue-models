@@ -40,13 +40,6 @@
 
     <card :model="$user" />
 
-    <!-- <div v-if="$user.things.length">
-      <h2>$user.things</h2>
-      <div class="item" v-for="(item, index) in $user.things" :key="index">
-        {{ item }}
-      </div>
-    </div> -->
-
     <h2>Schema Transformation</h2>
 
     <table>
