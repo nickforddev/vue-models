@@ -1,5 +1,5 @@
 /**
-  * vue-models v1.1.2
+  * vue-models v1.2.1
   * (c) 2017 Nick Ford
   * @license MIT
   */
@@ -5288,7 +5288,6 @@ var traverse = function traverse(data, schema, func) {
           if ([Object, Array].includes(schema.items[key])) {
             item[key] = traverse(item[key], schema[key], func);
           } else {
-            console.log('found an iterable custom type', func(item[key], schema.items[key]));
             item[key] = func(item[key], schema.items[key]);
           }
         }
