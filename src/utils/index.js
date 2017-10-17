@@ -33,8 +33,12 @@ export const getDiff = (oldData, newData) => {
 export const getChangedKeys = (oldData, newData) => {
   const updated = mergeDeepRight(oldData, newData)
   const output = reduce((result, key, index) => {
-    return equals(updated[key], oldData[key]) ? result : result.concat(key)
-  }, [], Object.keys(oldData))
+    return !(key in oldData)
+      ? result.concat(key)
+      : equals(updated[key], oldData[key])
+        ? result
+        : result.concat(key)
+  }, [], Object.keys(updated))
   return output
 }
 

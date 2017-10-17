@@ -76,11 +76,62 @@ The Model class has some default methods and computed attributes that are useful
 
 ### Model.basePath
 
-An overwriteable attribute that either uses the name of the model, or the urlRoot property from the options parameter.
+An overwriteable property that defaults to the name of the model (with rudimentary pluralization). To override the default value, either pass a new one as a computed property, or in the root level of the options.
+
+For a custom static basePath:
+
+```js
+import { Model } from 'vue-models'
+
+export class Property extends Model {
+  static defaults() {
+    return {
+      name: 'property',
+      basePath: 'properties'
+    }
+  },
+  static schema() {
+    return {}
+  }
+}
+
+```
+
+Or a computed basePath:
+
+```js
+import { Model } from 'vue-models'
+
+export class User extends Model {
+  static defaults() {
+    return {
+      name: 'user',
+      computed: {
+        basePath() {
+          return `${this.role}s`
+        }
+      }
+    }
+  }
+  static schema() {
+    return {
+      role: {
+        type: String
+      }
+    }
+  }
+}
+
+```
+
+### Model.urlRoot
+
+A computed property that defaults to ${basePath}/${id}, (ie. /users/12345678). This will be used for all CRUD operations except create, which will not have access to an id.
 
 ### Model.url
 
-An overwriteable attribute that is used for XHR requests. This will override the construction of the urls used for all CRUD operations.
+Returns either the basePath if the model is new, or the urlRoot if the model already has an id. This is used for all CRUD operations.
+<!-- An overwriteable attribute that is used for XHR requests. This will override the construction of the urls used for all CRUD operations. -->
 
 ### Model.isNew
 
