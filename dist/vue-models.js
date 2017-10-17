@@ -1,5 +1,5 @@
 /**
-  * vue-models v1.2.1
+  * vue-models v1.2.2
   * (c) 2017 Nick Ford
   * @license MIT
   */
@@ -5231,8 +5231,8 @@ var getDiff = function getDiff(oldData, newData) {
 var getChangedKeys = function getChangedKeys(oldData, newData) {
   var updated = mergeDeepRight_1(oldData, newData);
   var output = reduce_1(function (result, key, index) {
-    return equals_1(updated[key], oldData[key]) ? result : result.concat(key);
-  }, [], _Object$keys(oldData));
+    return !(key in oldData) ? result.concat(key) : equals_1(updated[key], oldData[key]) ? result : result.concat(key);
+  }, [], _Object$keys(updated));
   return output;
 };
 var removeUnderscores = function removeUnderscores(data) {
