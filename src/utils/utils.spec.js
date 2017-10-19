@@ -21,7 +21,6 @@ describe('getDiff', () => {
   })
 
   it('should pass keys that are new', () => {
-    console.log('DIFF KEYS')
     const a = {
       one: true
     }

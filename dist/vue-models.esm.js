@@ -1,5 +1,5 @@
 /**
-  * vue-models v1.2.2
+  * vue-models v1.2.3
   * (c) 2017 Nick Ford
   * @license MIT
   */
@@ -7285,7 +7285,8 @@ var Model = function () {
           return basePath || this.$options.name + 's';
         },
         urlRoot: function urlRoot() {
-          return this.basePath + '/' + this.id;
+          var url = _options.url ? _options.url : this.basePath + '/' + this.id;
+          return url;
         },
         isNew: function isNew() {
           return [undefined, ''].includes(this.id);

@@ -72,7 +72,7 @@ console.log(user.full_name) // returns 'Jane Doe'
 
 ## Computed Properties
 
-The Model class has some default methods and computed attributes that are useful for basic CRUD operations:
+The Model class has some default methods and computed attributes that are useful for basic CRUD operations, but can be overrided by passing options to the constructor:
 
 ### Model.basePath
 
@@ -130,7 +130,7 @@ A computed property that defaults to ${basePath}/${id}, (ie. /users/12345678). T
 
 ### Model.url
 
-Returns either the basePath if the model is new, or the urlRoot if the model already has an id. This is used for all CRUD operations.
+Returns either the basePath if the model is new, or the urlRoot if the model already has an id. This is used for all CRUD operations. If overrided, this property will be used for all CRUD operations.
 <!-- An overwriteable attribute that is used for XHR requests. This will override the construction of the urls used for all CRUD operations. -->
 
 ### Model.isNew

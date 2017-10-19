@@ -51,7 +51,10 @@ class Model {
           return basePath || this.$options.name + 's'
         },
         urlRoot() {
-          return `${this.basePath}/${this.id}`
+          const url = _options.url
+            ? _options.url
+            : `${this.basePath}/${this.id}`
+          return url
         },
         isNew() {
           return [undefined, ''].includes(this.id)
