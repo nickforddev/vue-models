@@ -1,5 +1,5 @@
 /**
-  * vue-models v1.2.4
+  * vue-models v1.3.0
   * (c) 2017 Nick Ford
   * @license MIT
   */
@@ -7360,7 +7360,7 @@ var Model = function () {
         set: function set(data) {
           var data_decoded = this.decode(data);
           for (var key in data_decoded) {
-            this[key] = data_decoded[key];
+            Vue.set(this, key, data_decoded[key]);
           }
           return this;
         },
