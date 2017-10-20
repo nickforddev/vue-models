@@ -7366,7 +7366,7 @@ var Model = function () {
         set: function set(data) {
           var data_decoded = this.decode(data);
           for (var key in data_decoded) {
-            Vue.set(this, key, data_decoded[key]);
+            this[key] = data_decoded[key];
           }
           return this;
         },
