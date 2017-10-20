@@ -89,14 +89,23 @@ export default class User extends Model {
           }
         }
       },
+      friends: {
+        type: Array,
+        items: {
+          type: ObjectId
+        }
+      },
       things: {
         type: Array,
         items: {
-          id: {
-            type: ObjectId
-          },
-          created: {
-            type: ISODate
+          type: Object,
+          properties: {
+            id: {
+              type: ObjectId
+            },
+            created: {
+              type: ISODate
+            }
           }
         }
       }

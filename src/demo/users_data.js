@@ -4,6 +4,13 @@ export default () => {
       id: {
         $oid: 'c12acd432b19cb22c12db021'
       },
+      friends: [{
+        $oid: '5919d19ce4e0552c25c68e1b'
+      }, {
+        $oid: '590c8a72e4e0553b1cc2827a'
+      }, {
+        $oid: '5914688de4e0556b1dcf29d3'
+      }],
       created: {
         $date: '2015-10-11T00:00:00'
       },

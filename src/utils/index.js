@@ -111,15 +111,25 @@ const traverse = (data, schema, func) => {
   let output = {}
   if (data instanceof Array) {
     output = data.map(item => {
-      for (let key in item) {
-        if (schema.items && key in schema.items) {
-          if ([Object, Array].includes(schema.items[key])) {
-            item[key] = traverse(item[key], schema[key], func)
-          } else {
-            item[key] = func(item[key], schema.items[key])
-          }
+      if (schema.items.type) {
+        if ([Object, Array].includes(schema.items.type)) {
+          item = traverse(item, schema.items, func)
+        } else {
+          item = func(item, schema.items)
         }
+        // console.log(schema.items.type.toString())
       }
+      // for (let key in item) {
+        // console.log(key)
+        // if (schema.items && key in schema.items) {
+        //   if ([Object, Array].includes(schema.items[key])) {
+        //     console.log('found iterable', key)
+        //     item[key] = traverse(item[key], schema[key], func)
+        //   } else {
+        //     item[key] = func(item[key], schema.items[key])
+        //   }
+        // }
+      // }
       return item
     })
   } else if (data instanceof Object) {
@@ -128,6 +138,8 @@ const traverse = (data, schema, func) => {
         output[key] = traverse(data[key], schema[key], func)
       } else if (schema[key] && schema[key].properties) {
         output[key] = traverse(data[key], schema[key].properties, func)
+      } else if (schema && schema.properties) {
+        output[key] = func(data[key], schema.properties[key])
       } else if (key in schema) {
         output[key] = func(data[key], schema[key])
       } else {
