@@ -1,5 +1,5 @@
 /**
-  * vue-models v1.2.3
+  * vue-models v1.2.4
   * (c) 2017 Nick Ford
   * @license MIT
   */
@@ -5277,13 +5277,11 @@ var traverse = function traverse(data, schema, func) {
   var output = {};
   if (data instanceof Array) {
     output = data.map(function (item) {
-      for (var key in item) {
-        if (schema.items && key in schema.items) {
-          if ([Object, Array].includes(schema.items[key])) {
-            item[key] = traverse(item[key], schema[key], func);
-          } else {
-            item[key] = func(item[key], schema.items[key]);
-          }
+      if (schema.items.type) {
+        if ([Object, Array].includes(schema.items.type)) {
+          item = traverse(item, schema.items, func);
+        } else {
+          item = func(item, schema.items);
         }
       }
       return item;
@@ -5294,6 +5292,8 @@ var traverse = function traverse(data, schema, func) {
         output[key] = traverse(data[key], schema[key], func);
       } else if (schema[key] && schema[key].properties) {
         output[key] = traverse(data[key], schema[key].properties, func);
+      } else if (schema && schema.properties) {
+        output[key] = func(data[key], schema.properties[key]);
       } else if (key in schema) {
         output[key] = func(data[key], schema[key]);
       } else {
