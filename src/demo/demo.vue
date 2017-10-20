@@ -27,6 +27,7 @@
               <button @click="setUser('one')" :disabled="current_user === 'one'">Set User One</button>
               <button @click="setUser('two')" :disabled="current_user === 'two'">Set User Two</button>
               <button @click="setUser('three')" :disabled="current_user === 'three'">Set User Three</button>
+              <button @click="save">Save</button>
             </div>
             <div v-else>
               <button @click="setUser()">Populate Model</button>
@@ -103,6 +104,12 @@ export default {
     },
     resetUser() {
       this.$user.reset()
+    },
+    save() {
+      const data = this.$user.decode()
+      console.log({data})
+      const user = new User()
+      user.save(data)
     }
   }
 }

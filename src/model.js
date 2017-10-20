@@ -113,7 +113,8 @@ class Model {
         set(data) {
           const data_decoded = this.decode(data)
           for (let key in data_decoded) {
-            this[key] = data_decoded[key]
+            // this[key] = data_decoded[key]
+            Vue.set(this, key, data_decoded[key])
           }
           return this
         },
