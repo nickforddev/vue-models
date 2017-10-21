@@ -94,14 +94,14 @@ class Model {
           const body = this.encode(changed)
           const method = this.isNew ? 'POST' : 'PUT'
           const path = _options.path ? '/' + _options.path : ''
-          const req = this.$request(this.url + path, {
+          const request = this.$request(this.url + path, {
             method,
             body
           })
-          req.then(() => {
+          request.then(() => {
             this.set(body)
           })
-          return req
+          return request
         },
         data() {
           let data = {}
@@ -134,7 +134,6 @@ class Model {
         }
       }
     }
-
     const model_options = mergeDeepRight(default_options, _options)
 
     return new Vue(model_options)

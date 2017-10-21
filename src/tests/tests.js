@@ -43,55 +43,63 @@ export default (Vue, Model, User) => {
     })
   })
 
-  describe('Extended JSON', () => {
-    const user = new User({
-      id: {
-        $oid: '586e6d75b7a7bc5c852c60a5'
-      },
-      created: {
+  const data = {
+    _id: {
+      $oid: '586e6d75b7a7bc5c852c60a5'
+    },
+    created: {
+      $date: '2016-12-16T00:00:00.000Z'
+    },
+    updated: '2016-12-16T00:00:00.000Z',
+    role: 'admin',
+    first_name: 'Tony',
+    last_name: 'Tiger',
+    email: 'tonytiger@gmail.com',
+    notifications: {
+      alarm: {
         $date: '2016-12-16T00:00:00.000Z'
       },
-      updated: '2016-12-16T00:00:00.000Z',
-      role: 'admin',
-      first_name: 'Tony',
-      last_name: 'Tiger',
-      email: 'tonytiger@gmail.com',
-      notifications: {
-        alarm: {
+      test: {
+        one: {
           $date: '2016-12-16T00:00:00.000Z'
         },
-        test: {
-          one: {
+        two: {
+          three: {
             $date: '2016-12-16T00:00:00.000Z'
-          },
-          two: {
-            three: {
-              $date: '2016-12-16T00:00:00.000Z'
-            }
           }
+        }
+      }
+    },
+    things: [
+      {
+        id: {
+          $oid: '42356d75b7a7bc5c52c11a90'
+        },
+        created: {
+          $date: '2016-12-16T00:00:00.000Z'
         }
       },
-      things: [
-        {
-          id: {
-            $oid: '42356d75b7a7bc5c52c11a90'
-          },
-          created: {
-            $date: '2016-12-16T00:00:00.000Z'
-          }
+      {
+        id: {
+          $oid: '09a11c25c5cb7a7b57d65324"'
         },
-        {
-          id: {
-            $oid: '09a11c25c5cb7a7b57d65324"'
-          },
-          created: {
-            $date: '2016-12-16T00:00:00.000Z'
-          }
+        created: {
+          $date: '2016-12-16T00:00:00.000Z'
         }
-      ]
-    })
+      }
+    ],
+    friends: [{
+      $oid: '5919d19ce4e0552c25c68e1b'
+    }, {
+      $oid: '590c8a72e4e0553b1cc2827a'
+    }, {
+      $oid: '5914688de4e0556b1dcf29d3'
+    }]
+  }
+
+  describe('Extended JSON - in', () => {
+    const user = new User(data)
     it('should decode extended json ISODate', () => {
-      // console.log(user.toJSON())
       expect(user.created)
         .toBe('2016-12-16T00:00:00.000Z')
     })
@@ -114,6 +122,42 @@ export default (Vue, Model, User) => {
     it('should process object arrays with extended json properties', () => {
       expect(user.things[0].id)
         .toBe('42356d75b7a7bc5c52c11a90')
+    })
+
+    it('should process typed arrays of ObjectIds', () => {
+      let all_strings = true
+      for (let friend of user.friends) {
+        if (typeof friend !== 'string') {
+          all_strings = false
+        }
+      }
+      expect(all_strings)
+        .toBe(true)
+    })
+  })
+
+  describe('Extended JSON - out', () => {
+    const user = new User(data)
+    const encoded = user.encode()
+    it('should reencode ObjectIds back to ObjectIds with an underscore', () => {
+      expect(encoded._id)
+        .toEqual({
+          $oid: '586e6d75b7a7bc5c852c60a5'
+        })
+    })
+
+    it('should convert ISODate strings back into ISODates', () => {
+      expect(encoded.created)
+        .toEqual({
+          $date: '2016-12-16T00:00:00.000Z'
+        })
+    })
+
+    it('should convert properties in object arrays', () => {
+      expect(encoded.things[0].id)
+        .toEqual({
+          $oid: '42356d75b7a7bc5c52c11a90'
+        })
     })
   })
 
