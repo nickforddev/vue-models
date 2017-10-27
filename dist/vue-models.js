@@ -1,5 +1,5 @@
 /**
-  * vue-models v1.3.0
+  * vue-models v1.4.0
   * (c) 2017 Nick Ford
   * @license MIT
   */
@@ -5300,7 +5300,7 @@ var traverse = function traverse(data, schema, func) {
       } else if (schema[key] && schema[key].properties) {
         output[key] = traverse(data[key], schema[key].properties, func);
       } else if (schema && schema.properties) {
-        output[key] = func(data[key], schema.properties[key]);
+        output = traverse(data, schema.properties, func);
       } else if (key in schema) {
         output[key] = func(data[key], schema[key]);
       } else {
