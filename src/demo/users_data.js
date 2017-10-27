@@ -52,6 +52,17 @@ export default () => {
             $date: '2017-10-09T00:00:00'
           }
         }
+      ],
+      periods: [
+        {
+          start_date: {
+            $date: '2017-01-01T00:00:00Z'
+          },
+          amount: 1000,
+          _id: {
+            $oid: '59ef6461bee3c00d09a53cfc'
+          }
+        }
       ]
     },
     two: {

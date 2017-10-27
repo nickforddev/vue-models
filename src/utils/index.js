@@ -1,6 +1,7 @@
 import {
   mergeDeepRight,
   clone,
+  path,
   reduce,
   isEmpty,
   equals
@@ -117,23 +118,12 @@ const traverse = (data, schema, func) => {
         } else {
           item = func(item, schema.items)
         }
-        // console.log(schema.items.type.toString())
       }
-      // for (let key in item) {
-        // console.log(key)
-        // if (schema.items && key in schema.items) {
-        //   if ([Object, Array].includes(schema.items[key])) {
-        //     console.log('found iterable', key)
-        //     item[key] = traverse(item[key], schema[key], func)
-        //   } else {
-        //     item[key] = func(item[key], schema.items[key])
-        //   }
-        // }
-      // }
       return item
     })
   } else if (data instanceof Object) {
     for (let key in data) {
+      validateSchema(schema, key)
       if (schema[key] && schema[key].items) {
         output[key] = traverse(data[key], schema[key], func)
       } else if (schema[key] && schema[key].properties) {
@@ -153,12 +143,18 @@ const traverse = (data, schema, func) => {
   return output
 }
 
+const validateSchema = (schema, key) => {
+  if ((schema[key] === undefined) && (path(['properties', key], schema) === undefined)) {
+    console.warn(`Key missing from schema: ${key}`)
+  }
+}
+
 // encode a model property
 
-export const encodeProperty = (data, schema) => {
+export const encodeProperty = (data, schema = {}) => {
   let output
   const constructor = schema.type
-  if (constructor && ![Object, Array].includes(constructor)) {
+  if (!isEmpty(schema) && constructor && ![Object, Array].includes(constructor)) {
     const instance = new constructor(data)
     output = instance.encode
       ? instance.encode()
@@ -171,10 +167,10 @@ export const encodeProperty = (data, schema) => {
 
 // decode a model property
 
-export const decodeProperty = (data, schema) => {
+export const decodeProperty = (data, schema = {}) => {
   let output
   const constructor = schema.type
-  if (constructor && ![Object, Array].includes(constructor)) {
+  if (!isEmpty(schema) && constructor && ![Object, Array].includes(constructor)) {
     output = new constructor(data).valueOf()
   } else {
     output = data

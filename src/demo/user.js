@@ -108,6 +108,23 @@ export default class User extends Model {
             }
           }
         }
+      },
+      periods: {
+        type: Array,
+        items: {
+          type: Object,
+          properties: {
+            _id: {
+              type: ObjectId
+            },
+            start_date: {
+              type: ISODate
+            }
+            // amount: {
+            //   type: Number
+            // }
+          }
+        }
       }
     }
   }
