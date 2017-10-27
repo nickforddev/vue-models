@@ -61,7 +61,14 @@ export default () => {
           amount: 1000,
           _id: {
             $oid: '59ef6461bee3c00d09a53cfc'
-          }
+          },
+          things: [
+            {
+              _id: {
+                $oid: '59ef6461bee3c00d09a53cfc'
+              }
+            }
+          ]
         }
       ]
     },

@@ -129,7 +129,8 @@ const traverse = (data, schema, func) => {
       } else if (schema[key] && schema[key].properties) {
         output[key] = traverse(data[key], schema[key].properties, func)
       } else if (schema && schema.properties) {
-        output[key] = func(data[key], schema.properties[key])
+        output = traverse(data, schema.properties, func)
+        // output[key] = func(data[key], schema.properties[key])
       } else if (key in schema) {
         output[key] = func(data[key], schema[key])
       } else {

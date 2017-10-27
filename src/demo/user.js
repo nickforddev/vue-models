@@ -119,10 +119,21 @@ export default class User extends Model {
             },
             start_date: {
               type: ISODate
+            },
+            amount: {
+              type: Number
+            },
+            things: {
+              type: Array,
+              items: {
+                type: Object,
+                properties: {
+                  _id: {
+                    type: ObjectId
+                  }
+                }
+              }
             }
-            // amount: {
-            //   type: Number
-            // }
           }
         }
       }
