@@ -87,7 +87,7 @@ class Model {
             path: ''
           }
           _options = mergeDeepRight(_options, options)
-          const changed = utils.getDiff(this.$data, _body)
+          const changed = this.isNew ? _body : utils.getDiff(this.$data, _body)
           if (isEmpty(changed)) {
             return Promise.resolve()
           }
