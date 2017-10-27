@@ -5288,6 +5288,7 @@ var traverse = function traverse(data, schema, func) {
     });
   } else if (data instanceof Object) {
     for (var key in data) {
+      validateSchema(schema, key);
       if (schema[key] && schema[key].items) {
         output[key] = traverse(data[key], schema[key], func);
       } else if (schema[key] && schema[key].properties) {
@@ -5305,10 +5306,16 @@ var traverse = function traverse(data, schema, func) {
   }
   return output;
 };
-var encodeProperty = function encodeProperty(data, schema) {
+var validateSchema = function validateSchema(schema, key) {
+  if (schema[key] === undefined && path_1(['properties', key], schema) === undefined) {
+    console.warn('Key missing from schema: ' + key);
+  }
+};
+var encodeProperty = function encodeProperty(data) {
+  var schema = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
   var output = void 0;
   var constructor = schema.type;
-  if (constructor && ![Object, Array].includes(constructor)) {
+  if (!isEmpty_1(schema) && constructor && ![Object, Array].includes(constructor)) {
     var instance = new constructor(data);
     output = instance.encode ? instance.encode() : instance.valueOf();
   } else {
@@ -5316,10 +5323,11 @@ var encodeProperty = function encodeProperty(data, schema) {
   }
   return output;
 };
-var decodeProperty = function decodeProperty(data, schema) {
+var decodeProperty = function decodeProperty(data) {
+  var schema = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
   var output = void 0;
   var constructor = schema.type;
-  if (constructor && ![Object, Array].includes(constructor)) {
+  if (!isEmpty_1(schema) && constructor && ![Object, Array].includes(constructor)) {
     output = new constructor(data).valueOf();
   } else {
     output = data;
@@ -7341,14 +7349,14 @@ var Model = function () {
           var body = this.encode(changed);
           var method = this.isNew ? 'POST' : 'PUT';
           var path = _options.path ? '/' + _options.path : '';
-          var req = this.$request(this.url + path, {
+          var request = this.$request(this.url + path, {
             method: method,
             body: body
           });
-          req.then(function () {
+          request.then(function () {
             _this2.set(body);
           });
-          return req;
+          return request;
         },
         data: function data() {
           var data = {};
