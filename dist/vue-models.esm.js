@@ -1,5 +1,5 @@
 /**
-  * vue-models v1.4.0
+  * vue-models v1.4.1
   * (c) 2017 Nick Ford
   * @license MIT
   */
@@ -7342,7 +7342,7 @@ var Model = function () {
             path: ''
           };
           _options = mergeDeepRight_1(_options, options);
-          var changed = getDiff(this.$data, _body);
+          var changed = this.isNew ? _body : getDiff(this.$data, _body);
           if (isEmpty_1(changed)) {
             return _Promise$1.resolve();
           }
