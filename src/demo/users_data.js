@@ -117,6 +117,24 @@ export default () => {
             $date: '2016-12-16T00:00:00'
           }
         }
+      ],
+      periods: [
+        {
+          start_date: {
+            $date: '2017-01-01T00:00:00Z'
+          },
+          amount: 1000,
+          _id: {
+            $oid: '59ef6461bee3c00d09a53cfc'
+          },
+          things: [
+            {
+              _id: {
+                $oid: '59ef6461bee3c00d09a53cfc'
+              }
+            }
+          ]
+        }
       ]
     },
     three: {
@@ -163,6 +181,24 @@ export default () => {
           created: {
             $date: '2016-03-11T00:00:00'
           }
+        }
+      ],
+      periods: [
+        {
+          start_date: {
+            $date: '2017-01-01T00:00:00Z'
+          },
+          amount: 1000,
+          _id: {
+            $oid: '59ef6461bee3c00d09a53cfc'
+          },
+          things: [
+            {
+              _id: {
+                $oid: '59ef6461bee3c00d09a53cfc'
+              }
+            }
+          ]
         }
       ]
     }

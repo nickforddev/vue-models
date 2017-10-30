@@ -1,7 +1,6 @@
 import {
   mergeDeepRight,
   clone,
-  path,
   reduce,
   isEmpty,
   equals
@@ -112,42 +111,34 @@ const traverse = (data, schema, func) => {
   let output = {}
   if (data instanceof Array) {
     output = data.map(item => {
-      if (schema.items.type) {
-        if ([Object, Array].includes(schema.items.type)) {
-          item = traverse(item, schema.items, func)
-        } else {
-          item = func(item, schema.items)
-        }
+      if ([Object, Array].includes(schema.items.type)) {
+        item = traverse(item, schema.items, func)
+      } else {
+        item = func(item, schema.items)
       }
       return item
     })
   } else if (data instanceof Object) {
     for (let key in data) {
-      validateSchema(schema, key)
-      if (schema[key] && schema[key].items) {
-        output[key] = traverse(data[key], schema[key], func)
-      } else if (schema[key] && schema[key].properties) {
-        output[key] = traverse(data[key], schema[key].properties, func)
-      } else if (schema && schema.properties) {
+      if (key in schema) {
+        if (schema[key].items) {
+          output[key] = traverse(data[key], schema[key], func)
+        } else if (schema[key].properties) {
+          output[key] = traverse(data[key], schema[key].properties, func)
+        } else {
+          output[key] = func(data[key], schema[key])
+        }
+      } else if (schema.properties) {
         output = traverse(data, schema.properties, func)
-        // output[key] = func(data[key], schema.properties[key])
-      } else if (key in schema) {
-        output[key] = func(data[key], schema[key])
       } else {
+        console.warn('Key missing from schema: ' + key)
         output[key] = data[key]
       }
     }
   } else {
-    // found a normal key: value prop
     output = func(data, schema)
   }
   return output
-}
-
-const validateSchema = (schema, key) => {
-  if ((schema[key] === undefined) && (path(['properties', key], schema) === undefined)) {
-    console.warn(`Key missing from schema: ${key}`)
-  }
 }
 
 // encode a model property
