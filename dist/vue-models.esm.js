@@ -1,5 +1,5 @@
 /**
-  * vue-models v1.4.2
+  * vue-models v1.4.3
   * (c) 2017 Nick Ford
   * @license MIT
   */
@@ -7288,14 +7288,14 @@ var Model = function () {
           return basePath || this.$options.name + 's';
         },
         urlRoot: function urlRoot() {
-          var url = _options.url ? _options.url : this.basePath + '/' + this.id;
+          var url = _options.url ? typeof _options.url === 'function' ? _options.url() : _options.url : this.basePath + '/' + this.id;
           return url;
         },
         isNew: function isNew() {
           return [undefined, ''].includes(this.id);
         },
         url: function url() {
-          var url = _options.url ? _options.url : this.isNew ? this.basePath : this.urlRoot;
+          var url = _options.url ? typeof _options.url === 'function' ? _options.url() : _options.url : this.isNew ? this.basePath : this.urlRoot;
           return url;
         },
         $request: function $request() {
