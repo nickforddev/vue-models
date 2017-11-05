@@ -52,7 +52,9 @@ class Model {
         },
         urlRoot() {
           const url = _options.url
-            ? _options.url
+            ? typeof _options.url === 'function'
+              ? _options.url()
+              : _options.url
             : `${this.basePath}/${this.id}`
           return url
         },
@@ -61,7 +63,9 @@ class Model {
         },
         url() {
           const url = _options.url
-            ? _options.url
+            ? typeof _options.url === 'function'
+              ? _options.url()
+              : _options.url
             : this.isNew
               ? this.basePath
               : this.urlRoot

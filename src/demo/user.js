@@ -12,7 +12,7 @@ export default class User extends Model {
             const basePath = this.$options.basePath
             return basePath || this.role + 's'
           } else {
-            return ''
+            return 'users'
           }
         },
         full_name() {
