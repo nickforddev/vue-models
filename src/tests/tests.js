@@ -22,6 +22,16 @@ export default (Vue, Model, User) => {
         })
     })
 
+    it('should be fetching the url :name/:id', () => {
+      expect(global.fetch.mock.calls[0][0])
+        .toBe('users/123')
+    })
+
+    it('should have updated url based on the model data', () => {
+      expect(model.url)
+        .toBe('tenants/593af5eae4e0554e76b71f8a')
+    })
+
     it('should resolve toJSON', () => {
       expect(model.toJSON())
         .toBeInstanceOf(Object)
@@ -208,6 +218,36 @@ export default (Vue, Model, User) => {
       test_component.$destroy()
       expect(test_component.$user.first_name)
         .toBe('')
+    })
+  })
+
+  describe('VueModels - custom urls - function', () => {
+    const user = new User(null, {
+      url() {
+        return 'testtesttest'
+      }
+    })
+    it('should fetch via the custom url function', () => {
+      expect.assertions(1)
+      return user.fetch()
+        .then(() => {
+          expect(global.fetch.mock.calls[4][0])
+            .toBe('testtesttest')
+        })
+    })
+  })
+
+  describe('VueModels - custom urls - property', () => {
+    const user = new User(null, {
+      url: 'testproperty'
+    })
+    it('should fetch via the custom url function', () => {
+      expect.assertions(1)
+      return user.fetch()
+        .then(() => {
+          expect(global.fetch.mock.calls[5][0])
+            .toBe('testproperty')
+        })
     })
   })
 }
