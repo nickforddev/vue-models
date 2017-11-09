@@ -1,14 +1,3 @@
-// const fetchFunction = global.fetch.bind({})
-// global.fetch = class {
-//   constructor(...args) {
-//     return fetchFunction(...args)
-//   }
-//   mockResponse(...args) {
-//     return fetchFunction.mockResponse(...args)
-//   }
-// }
-// fetch.mockResponse = fetchFunction.mockResponse
-
 export default (Vue, Model, User) => {
   describe('VueModel basics', () => {
     it('should have access to static schema method', () => {
@@ -236,6 +225,50 @@ export default (Vue, Model, User) => {
       .then((res) => {
         expect(test_component.$user.full_name)
           .toBe('Taco Cat')
+      })
+    })
+
+    it('should correctly save diff model data during save', () => {
+      expect.assertions(1)
+      test_component.$user.set({
+        first_name: 'Robot',
+        last_name: 'Obor'
+      })
+
+      return test_component.$user.save({
+        first_name: 'Robot',
+        last_name: 'Obor',
+        email: 'test@gmail.com'
+      }, {
+        diff: true
+      })
+      .then((res) => {
+        expect(global.fetch.mock.calls[global.fetchCount - 1][1].body)
+          .toEqual(JSON.stringify({
+            email: 'test@gmail.com'
+          }))
+      })
+    })
+
+    it('should correctly save model data with diff: false', () => {
+      expect.assertions(1)
+      test_component.$user.set({
+        first_name: 'Robot',
+        last_name: 'Obor'
+      })
+
+      return test_component.$user.save({
+        first_name: 'Robot',
+        last_name: 'Obor'
+      }, {
+        diff: false
+      })
+      .then((res) => {
+        expect(global.fetch.mock.calls[global.fetchCount - 1][1].body)
+          .toEqual(JSON.stringify({
+            first_name: 'Robot',
+            last_name: 'Obor'
+          }))
       })
     })
 
