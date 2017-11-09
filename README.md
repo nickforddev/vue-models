@@ -181,7 +181,72 @@ NOTE: By default, models are reset when the parent component is destroyed. To di
 
 ## Schema
 
-Model classes use a static schema method to defined the initial data properties for the Vue instance. The schema format is heavily influenced by JSON Schema, with few differences. JSON Schema is frequently used for validation, while `vue-model` uses a schema to define initial state, and to transform data. Data can be transformed by creating custom type classes that mimic the behavior of the native constructors. Run the demo for a comprehensive example of data transformation that handles extended JSON ObjectIds and ISODates.
+Model classes use a static schema method to defined the initial data properties for the Vue instance. The schema format is heavily influenced by JSON Schema, with few differences. JSON Schema is frequently used for validation, while `vue-models` uses a schema to define initial state, and to transform data. Data can be transformed by creating custom type classes that mimic the behavior of the native constructors. Run the demo for a comprehensive example of data transformation that handles extended JSON ObjectIds and ISODates.
+
+The following is an example of some nested structures in a schema definition. It should look familar to those who have used JSON Schema.
+
+```js
+import { Model } from 'vue-models'
+
+export class User extends Model {
+  static defaults() {
+    return {
+      name: 'user'
+    }
+  }
+  static schema() {
+    return {
+      preferences: {
+        type: Object,
+        properties: {
+          notifications: {
+            type: Object,
+            properties: {
+              email: {
+                type: Boolean
+              },
+              text: {
+                type: Boolean
+              }
+            }
+          },
+          privacy: {
+            type: Object,
+            properties: {
+              sendBugReports: {
+                type: Boolean,
+                default: true
+              }
+            }
+          }
+        }
+      },
+      friends: {
+        type: Array,
+        items: {
+          type: Object,
+          properties: {
+            id: {
+              type: String
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+NOTE: By default, `vue-models` will print warnings in the console is data is set on a model without a matching schema definition. This is particularly important for root-level keys, which Vue will not be able to make reactive. To disable these warnings, pass `schemaWarnings: false` as an option when initting the plugin with Vue.
+
+```js
+import Vue from 'vue'
+import VueModels from 'vue-models'
+
+Vue.use(VueModels, {
+  schemaWarnings: false
+})
+```
 
 ## Types
 
