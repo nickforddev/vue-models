@@ -1,3 +1,14 @@
+// const fetchFunction = global.fetch.bind({})
+// global.fetch = class {
+//   constructor(...args) {
+//     return fetchFunction(...args)
+//   }
+//   mockResponse(...args) {
+//     return fetchFunction.mockResponse(...args)
+//   }
+// }
+// fetch.mockResponse = fetchFunction.mockResponse
+
 export default (Vue, Model, User) => {
   describe('VueModel basics', () => {
     it('should have access to static schema method', () => {
@@ -23,7 +34,7 @@ export default (Vue, Model, User) => {
     })
 
     it('should be fetching the url :name/:id', () => {
-      expect(global.fetch.mock.calls[0][0])
+      expect(global.fetch.mock.calls[global.fetchCount - 1][0])
         .toBe('users/123')
     })
 
@@ -202,15 +213,29 @@ export default (Vue, Model, User) => {
         })
     })
 
-    it('should correctly save new model data', () => {
+    it('should correctly save new model data with consume: false', () => {
+      expect.assertions(1)
+      return test_component.$user.save({
+        first_name: 'Robot',
+        last_name: 'Obor'
+      }, {
+        consume: false
+      })
+      .then((res) => {
+        expect(test_component.$user.full_name)
+          .toBe('Robot Obor')
+      })
+    })
+
+    it('should correctly save new model data with consume: true', () => {
       expect.assertions(1)
       return test_component.$user.save({
         first_name: 'Robot',
         last_name: 'Obor'
       })
-      .then(() => {
+      .then((res) => {
         expect(test_component.$user.full_name)
-          .toBe('Robot Obor')
+          .toBe('Taco Cat')
       })
     })
 
@@ -231,7 +256,7 @@ export default (Vue, Model, User) => {
       expect.assertions(1)
       return user.fetch()
         .then(() => {
-          expect(global.fetch.mock.calls[4][0])
+          expect(global.fetch.mock.calls[global.fetchCount - 1][0])
             .toBe('testtesttest')
         })
     })
@@ -245,7 +270,7 @@ export default (Vue, Model, User) => {
       expect.assertions(1)
       return user.fetch()
         .then(() => {
-          expect(global.fetch.mock.calls[5][0])
+          expect(global.fetch.mock.calls[global.fetchCount - 1][0])
             .toBe('testproperty')
         })
     })

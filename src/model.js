@@ -77,33 +77,59 @@ class Model {
       },
       methods: {
         async fetch() {
-          const response = await this.$request(this.urlRoot)
+          let response = await this.$request(this.urlRoot)
+          // if (this.$options.beforeSet) {
+          //   response = this.$options.beforeSet(response)
+          // }
           this.set(response)
           return response
         },
         destroy() {
           return this.$request(this.urlRoot, {
-            method: 'DELETE'
+            method: 'delete'
           })
         },
         save(_body, options = {}) {
           let _options = {
-            path: ''
+            path: '',
+            diff: true,
+            consume: true,
+            method: 'put'
           }
           _options = mergeDeepRight(_options, options)
-          const changed = this.isNew ? _body : utils.getDiff(this.$data, _body)
+          // const changed = this.isNew
+          //   ? _body
+          //   : utils.getDiff(this.$data, _body)
+
+          const changed = !options.diff || this.isNew
+            ? _body
+            : utils.getDiff(this.$data, _body)
+
           if (isEmpty(changed)) {
             return Promise.resolve()
           }
           const body = this.encode(changed)
-          const method = this.isNew ? 'POST' : 'PUT'
-          const path = _options.path ? '/' + _options.path : ''
+
+          let method
+          if (options.method) {
+            method = options.method
+          } else if (this.isNew) {
+            method = 'post'
+          } else {
+            method = _options.method
+          }
+          const path = _options.path
+            ? '/' + _options.path
+            : ''
           const request = this.$request(this.url + path, {
             method,
             body
           })
-          request.then(() => {
-            this.set(body)
+          request.then((response) => {
+            const data = _options.consume
+              ? response
+              : body
+            this.set(data)
           })
           return request
         },

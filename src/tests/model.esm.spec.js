@@ -6,7 +6,15 @@ import User from '../demo/user'
 import tenant_data from './tenant_data'
 import tests from './tests'
 
-Vue.use(VueRequests)
+global.fetchCount = 0
+
+Vue.use(VueRequests, {
+  before() {
+    console.log('before')
+    global.fetchCount = global.fetchCount + 1
+    console.log(global.fetchCount)
+  }
+})
 Vue.use(VueModel)
 
 fetch.mockResponse(JSON.stringify(tenant_data), {

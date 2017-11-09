@@ -8,7 +8,13 @@ import tests from './tests'
 
 const { Model } = VueModel
 
-Vue.use(VueRequests)
+global.fetchCount = 0
+
+Vue.use(VueRequests, {
+  before() {
+    global.fetchCount++
+  }
+})
 Vue.use(VueModel)
 
 fetch.mockResponse(JSON.stringify(tenant_data), {
