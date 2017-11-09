@@ -10,9 +10,7 @@ global.fetchCount = 0
 
 Vue.use(VueRequests, {
   before() {
-    console.log('before')
-    global.fetchCount = global.fetchCount + 1
-    console.log(global.fetchCount)
+    global.fetchCount++
   }
 })
 Vue.use(VueModel)
