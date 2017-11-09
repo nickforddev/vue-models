@@ -1,8 +1,125 @@
 /**
-  * vue-models v1.4.3
+  * vue-models v1.4.4
   * (c) 2017 Nick Ford
   * @license MIT
   */
+function _isPlaceholder(a) {
+       return a != null && typeof a === 'object' && a['@@functional/placeholder'] === true;
+}
+var _isPlaceholder_1 = _isPlaceholder;
+
+function _curry1(fn) {
+  return function f1(a) {
+    if (arguments.length === 0 || _isPlaceholder_1(a)) {
+      return f1;
+    } else {
+      return fn.apply(this, arguments);
+    }
+  };
+}
+var _curry1_1 = _curry1;
+
+function _curry2(fn) {
+  return function f2(a, b) {
+    switch (arguments.length) {
+      case 0:
+        return f2;
+      case 1:
+        return _isPlaceholder_1(a) ? f2 : _curry1_1(function (_b) {
+          return fn(a, _b);
+        });
+      default:
+        return _isPlaceholder_1(a) && _isPlaceholder_1(b) ? f2 : _isPlaceholder_1(a) ? _curry1_1(function (_a) {
+          return fn(_a, b);
+        }) : _isPlaceholder_1(b) ? _curry1_1(function (_b) {
+          return fn(a, _b);
+        }) : fn(a, b);
+    }
+  };
+}
+var _curry2_1 = _curry2;
+
+function _curry3(fn) {
+  return function f3(a, b, c) {
+    switch (arguments.length) {
+      case 0:
+        return f3;
+      case 1:
+        return _isPlaceholder_1(a) ? f3 : _curry2_1(function (_b, _c) {
+          return fn(a, _b, _c);
+        });
+      case 2:
+        return _isPlaceholder_1(a) && _isPlaceholder_1(b) ? f3 : _isPlaceholder_1(a) ? _curry2_1(function (_a, _c) {
+          return fn(_a, b, _c);
+        }) : _isPlaceholder_1(b) ? _curry2_1(function (_b, _c) {
+          return fn(a, _b, _c);
+        }) : _curry1_1(function (_c) {
+          return fn(a, b, _c);
+        });
+      default:
+        return _isPlaceholder_1(a) && _isPlaceholder_1(b) && _isPlaceholder_1(c) ? f3 : _isPlaceholder_1(a) && _isPlaceholder_1(b) ? _curry2_1(function (_a, _b) {
+          return fn(_a, _b, c);
+        }) : _isPlaceholder_1(a) && _isPlaceholder_1(c) ? _curry2_1(function (_a, _c) {
+          return fn(_a, b, _c);
+        }) : _isPlaceholder_1(b) && _isPlaceholder_1(c) ? _curry2_1(function (_b, _c) {
+          return fn(a, _b, _c);
+        }) : _isPlaceholder_1(a) ? _curry1_1(function (_a) {
+          return fn(_a, b, c);
+        }) : _isPlaceholder_1(b) ? _curry1_1(function (_b) {
+          return fn(a, _b, c);
+        }) : _isPlaceholder_1(c) ? _curry1_1(function (_c) {
+          return fn(a, b, _c);
+        }) : fn(a, b, c);
+    }
+  };
+}
+var _curry3_1 = _curry3;
+
+function _isObject(x) {
+  return Object.prototype.toString.call(x) === '[object Object]';
+}
+var _isObject_1 = _isObject;
+
+function _has(prop, obj) {
+  return Object.prototype.hasOwnProperty.call(obj, prop);
+}
+var _has_1 = _has;
+
+var mergeWithKey =              _curry3_1(function mergeWithKey(fn, l, r) {
+  var result = {};
+  var k;
+  for (k in l) {
+    if (_has_1(k, l)) {
+      result[k] = _has_1(k, r) ? fn(k, l[k], r[k]) : l[k];
+    }
+  }
+  for (k in r) {
+    if (_has_1(k, r) && !_has_1(k, result)) {
+      result[k] = r[k];
+    }
+  }
+  return result;
+});
+var mergeWithKey_1 = mergeWithKey;
+
+var mergeDeepWithKey =              _curry3_1(function mergeDeepWithKey(fn, lObj, rObj) {
+  return mergeWithKey_1(function (k, lVal, rVal) {
+    if (_isObject_1(lVal) && _isObject_1(rVal)) {
+      return mergeDeepWithKey(fn, lVal, rVal);
+    } else {
+      return fn(k, lVal, rVal);
+    }
+  }, lObj, rObj);
+});
+var mergeDeepWithKey_1 = mergeDeepWithKey;
+
+var mergeDeepRight =              _curry2_1(function mergeDeepRight(lObj, rObj) {
+  return mergeDeepWithKey_1(function (k, lVal, rVal) {
+    return rVal;
+  }, lObj, rObj);
+});
+var mergeDeepRight_1 = mergeDeepRight;
+
 function unwrapExports (x) {
 	return x && x.__esModule ? x['default'] : x;
 }
@@ -58,12 +175,12 @@ var _ctx = function (fn, that, length) {
   };
 };
 
-var _isObject = function (it) {
+var _isObject$2 = function (it) {
   return typeof it === 'object' ? it !== null : typeof it === 'function';
 };
 
 var _anObject = function (it) {
-  if (!_isObject(it)) throw TypeError(it + ' is not an object!');
+  if (!_isObject$2(it)) throw TypeError(it + ' is not an object!');
   return it;
 };
 
@@ -80,7 +197,7 @@ var _descriptors = !_fails(function () {
 });
 
 var document$1 = _global.document;
-var is = _isObject(document$1) && _isObject(document$1.createElement);
+var is = _isObject$2(document$1) && _isObject$2(document$1.createElement);
 var _domCreate = function (it) {
   return is ? document$1.createElement(it) : {};
 };
@@ -90,11 +207,11 @@ var _ie8DomDefine = !_descriptors && !_fails(function () {
 });
 
 var _toPrimitive = function (it, S) {
-  if (!_isObject(it)) return it;
+  if (!_isObject$2(it)) return it;
   var fn, val;
-  if (S && typeof (fn = it.toString) == 'function' && !_isObject(val = fn.call(it))) return val;
-  if (typeof (fn = it.valueOf) == 'function' && !_isObject(val = fn.call(it))) return val;
-  if (!S && typeof (fn = it.toString) == 'function' && !_isObject(val = fn.call(it))) return val;
+  if (S && typeof (fn = it.toString) == 'function' && !_isObject$2(val = fn.call(it))) return val;
+  if (typeof (fn = it.valueOf) == 'function' && !_isObject$2(val = fn.call(it))) return val;
+  if (!S && typeof (fn = it.toString) == 'function' && !_isObject$2(val = fn.call(it))) return val;
   throw TypeError("Can't convert object to primitive value");
 };
 
@@ -214,42 +331,6 @@ exports.default = function () {
 });
 var _createClass = unwrapExports(createClass);
 
-function _isPlaceholder(a) {
-       return a != null && typeof a === 'object' && a['@@functional/placeholder'] === true;
-}
-var _isPlaceholder_1 = _isPlaceholder;
-
-function _curry1(fn) {
-  return function f1(a) {
-    if (arguments.length === 0 || _isPlaceholder_1(a)) {
-      return f1;
-    } else {
-      return fn.apply(this, arguments);
-    }
-  };
-}
-var _curry1_1 = _curry1;
-
-function _curry2(fn) {
-  return function f2(a, b) {
-    switch (arguments.length) {
-      case 0:
-        return f2;
-      case 1:
-        return _isPlaceholder_1(a) ? f2 : _curry1_1(function (_b) {
-          return fn(a, _b);
-        });
-      default:
-        return _isPlaceholder_1(a) && _isPlaceholder_1(b) ? f2 : _isPlaceholder_1(a) ? _curry1_1(function (_a) {
-          return fn(_a, b);
-        }) : _isPlaceholder_1(b) ? _curry1_1(function (_b) {
-          return fn(a, _b);
-        }) : fn(a, b);
-    }
-  };
-}
-var _curry2_1 = _curry2;
-
 var path =              _curry2_1(function path(paths, obj) {
   var val = obj;
   var idx = 0;
@@ -321,7 +402,7 @@ var _toObject = function (it) {
 };
 
 var hasOwnProperty = {}.hasOwnProperty;
-var _has = function (it, key) {
+var _has$2 = function (it, key) {
   return hasOwnProperty.call(it, key);
 };
 
@@ -395,8 +476,8 @@ var _objectKeysInternal = function (object, names) {
   var i = 0;
   var result = [];
   var key;
-  for (key in O) if (key != IE_PROTO) _has(O, key) && result.push(key);
-  while (names.length > i) if (_has(O, key = names[i++])) {
+  for (key in O) if (key != IE_PROTO) _has$2(O, key) && result.push(key);
+  while (names.length > i) if (_has$2(O, key = names[i++])) {
     ~arrayIndexOf(result, key) || result.push(key);
   }
   return result;
@@ -458,11 +539,6 @@ function _functionName(f) {
   return match == null ? '' : match[1];
 }
 var _functionName_1 = _functionName;
-
-function _has$2(prop, obj) {
-  return Object.prototype.hasOwnProperty.call(obj, prop);
-}
-var _has_1 = _has$2;
 
 var identical =              _curry2_1(function identical(a, b) {
   if (a === b) {
@@ -647,42 +723,6 @@ var equals =              _curry2_1(function equals(a, b) {
 });
 var equals_1 = equals;
 
-function _curry3(fn) {
-  return function f3(a, b, c) {
-    switch (arguments.length) {
-      case 0:
-        return f3;
-      case 1:
-        return _isPlaceholder_1(a) ? f3 : _curry2_1(function (_b, _c) {
-          return fn(a, _b, _c);
-        });
-      case 2:
-        return _isPlaceholder_1(a) && _isPlaceholder_1(b) ? f3 : _isPlaceholder_1(a) ? _curry2_1(function (_a, _c) {
-          return fn(_a, b, _c);
-        }) : _isPlaceholder_1(b) ? _curry2_1(function (_b, _c) {
-          return fn(a, _b, _c);
-        }) : _curry1_1(function (_c) {
-          return fn(a, b, _c);
-        });
-      default:
-        return _isPlaceholder_1(a) && _isPlaceholder_1(b) && _isPlaceholder_1(c) ? f3 : _isPlaceholder_1(a) && _isPlaceholder_1(b) ? _curry2_1(function (_a, _b) {
-          return fn(_a, _b, c);
-        }) : _isPlaceholder_1(a) && _isPlaceholder_1(c) ? _curry2_1(function (_a, _c) {
-          return fn(_a, b, _c);
-        }) : _isPlaceholder_1(b) && _isPlaceholder_1(c) ? _curry2_1(function (_b, _c) {
-          return fn(a, _b, _c);
-        }) : _isPlaceholder_1(a) ? _curry1_1(function (_a) {
-          return fn(_a, b, c);
-        }) : _isPlaceholder_1(b) ? _curry1_1(function (_b) {
-          return fn(a, _b, c);
-        }) : _isPlaceholder_1(c) ? _curry1_1(function (_c) {
-          return fn(a, b, _c);
-        }) : fn(a, b, c);
-    }
-  };
-}
-var _curry3_1 = _curry3;
-
 var _isArray = Array.isArray || function _isArray(val) {
   return val != null && val.length >= 0 && Object.prototype.toString.call(val) === '[object Array]';
 };
@@ -851,46 +891,6 @@ var _reduce_1 = _reduce;
 
 var reduce =              _curry3_1(_reduce_1);
 var reduce_1 = reduce;
-
-function _isObject$2(x) {
-  return Object.prototype.toString.call(x) === '[object Object]';
-}
-var _isObject_1 = _isObject$2;
-
-var mergeWithKey =              _curry3_1(function mergeWithKey(fn, l, r) {
-  var result = {};
-  var k;
-  for (k in l) {
-    if (_has_1(k, l)) {
-      result[k] = _has_1(k, r) ? fn(k, l[k], r[k]) : l[k];
-    }
-  }
-  for (k in r) {
-    if (_has_1(k, r) && !_has_1(k, result)) {
-      result[k] = r[k];
-    }
-  }
-  return result;
-});
-var mergeWithKey_1 = mergeWithKey;
-
-var mergeDeepWithKey =              _curry3_1(function mergeDeepWithKey(fn, lObj, rObj) {
-  return mergeWithKey_1(function (k, lVal, rVal) {
-    if (_isObject_1(lVal) && _isObject_1(rVal)) {
-      return mergeDeepWithKey(fn, lVal, rVal);
-    } else {
-      return fn(k, lVal, rVal);
-    }
-  }, lObj, rObj);
-});
-var mergeDeepWithKey_1 = mergeDeepWithKey;
-
-var mergeDeepRight =              _curry2_1(function mergeDeepRight(lObj, rObj) {
-  return mergeDeepWithKey_1(function (k, lVal, rVal) {
-    return rVal;
-  }, lObj, rObj);
-});
-var mergeDeepRight_1 = mergeDeepRight;
 
 var empty =              _curry1_1(function empty(x) {
   return x != null && typeof x['fantasy-land/empty'] === 'function' ? x['fantasy-land/empty']() : x != null && x.constructor != null && typeof x.constructor['fantasy-land/empty'] === 'function' ? x.constructor['fantasy-land/empty']() : x != null && typeof x.empty === 'function' ? x.empty() : x != null && x.constructor != null && typeof x.constructor.empty === 'function' ? x.constructor.empty() : _isArray(x) ? [] : _isString_1(x) ? '' : _isObject_1(x) ? {} : _isArguments_1(x) ? function () {
@@ -5139,7 +5139,7 @@ var defaults = {
   headers: {},
   root: ''
 };
-var init$1 = function () {
+var init$2 = function () {
   var _ref = _asyncToGenerator(              regenerator.mark(function _callee2(vm, _config) {
     var config;
     return regenerator.wrap(function _callee2$(_context2) {
@@ -5192,7 +5192,7 @@ var init$1 = function () {
 var makeMixin$1 = (function (Vue, config) {
   return {
     beforeCreate: function beforeCreate() {
-      init$1(this, config);
+      init$2(this, config);
     }
   };
 });
@@ -5209,6 +5209,10 @@ var VueRequest = function () {
   return VueRequest;
 }();
 
+var options = void 0;
+function init$1(_options) {
+  options = _options;
+}
 function isDef(obj) {
   if (obj === undefined) return false;
   return !isEmpty_1(obj);
@@ -5297,7 +5301,9 @@ var traverse = function traverse(data, schema, func) {
       } else if (schema.properties) {
         output = traverse(data, schema.properties, func);
       } else {
-        console.warn('Key missing from schema: ' + key);
+        if (options.schemaWarnings) {
+          console.warn('Key missing from schema: ' + key);
+        }
         output[key] = data[key];
       }
     }
@@ -5493,7 +5499,7 @@ $exports.store = store;
 var def$1 = _objectDp.f;
 var TAG$1$1 = _wks$1('toStringTag');
 var _setToStringTag$1 = function (it, tag, stat) {
-  if (it && !_has(it = stat ? it : it.prototype, TAG$1$1)) def$1(it, TAG$1$1, { configurable: true, value: tag });
+  if (it && !_has$2(it = stat ? it : it.prototype, TAG$1$1)) def$1(it, TAG$1$1, { configurable: true, value: tag });
 };
 
 'use strict';
@@ -5508,7 +5514,7 @@ var IE_PROTO$3 = _sharedKey('IE_PROTO');
 var ObjectProto$1$1 = Object.prototype;
 var _objectGpo$1 = Object.getPrototypeOf || function (O) {
   O = _toObject(O);
-  if (_has(O, IE_PROTO$3)) return O[IE_PROTO$3];
+  if (_has$2(O, IE_PROTO$3)) return O[IE_PROTO$3];
   if (typeof O.constructor == 'function' && O instanceof O.constructor) {
     return O.constructor.prototype;
   } return O instanceof Object ? ObjectProto$1$1 : null;
@@ -5543,7 +5549,7 @@ var _iterDefine$1 = function (Base, NAME, Constructor, next, DEFAULT, IS_SET, FO
     IteratorPrototype = _objectGpo$1($anyNative.call(new Base()));
     if (IteratorPrototype !== Object.prototype && IteratorPrototype.next) {
       _setToStringTag$1(IteratorPrototype, TAG, true);
-      if (!_library$1 && !_has(IteratorPrototype, ITERATOR$1$1)) _hide(IteratorPrototype, ITERATOR$1$1, returnThis$1);
+      if (!_library$1 && !_has$2(IteratorPrototype, ITERATOR$1$1)) _hide(IteratorPrototype, ITERATOR$1$1, returnThis$1);
     }
   }
   if (DEF_VALUES && $native && $native.name !== VALUES$1) {
@@ -5862,7 +5868,7 @@ var _perform$1 = function (exec) {
 
 var _promiseResolve$1 = function (C, x) {
   _anObject(C);
-  if (_isObject(x) && x.constructor === C) return x;
+  if (_isObject$2(x) && x.constructor === C) return x;
   var promiseCapability = _newPromiseCapability$1.f(C);
   var resolve = promiseCapability.resolve;
   resolve(x);
@@ -5931,7 +5937,7 @@ var USE_NATIVE$1$1 = !!function () {
 }();
 var isThenable$1 = function (it) {
   var then;
-  return _isObject(it) && typeof (then = it.then) == 'function' ? then : false;
+  return _isObject$2(it) && typeof (then = it.then) == 'function' ? then : false;
 };
 var notify$1 = function (promise, isReject) {
   if (promise._n) return;
@@ -6761,22 +6767,22 @@ var setMeta = function (it) {
   } });
 };
 var fastKey = function (it, create) {
-  if (!_isObject(it)) return typeof it == 'symbol' ? it : (typeof it == 'string' ? 'S' : 'P') + it;
-  if (!_has(it, META)) {
+  if (!_isObject$2(it)) return typeof it == 'symbol' ? it : (typeof it == 'string' ? 'S' : 'P') + it;
+  if (!_has$2(it, META)) {
     if (!isExtensible(it)) return 'F';
     if (!create) return 'E';
     setMeta(it);
   } return it[META].i;
 };
 var getWeak = function (it, create) {
-  if (!_has(it, META)) {
+  if (!_has$2(it, META)) {
     if (!isExtensible(it)) return true;
     if (!create) return false;
     setMeta(it);
   } return it[META].w;
 };
 var onFreeze = function (it) {
-  if (FREEZE && meta.NEED && isExtensible(it) && !_has(it, META)) setMeta(it);
+  if (FREEZE && meta.NEED && isExtensible(it) && !_has$2(it, META)) setMeta(it);
   return it;
 };
 var meta = module.exports = {
@@ -6853,7 +6859,7 @@ var f$8 = _descriptors ? gOPD$2 : function getOwnPropertyDescriptor(O, P) {
   if (_ie8DomDefine) try {
     return gOPD$2(O, P);
   } catch (e) {             }
-  if (_has(O, P)) return _propertyDesc(!_objectPie$1.f.call(O, P), O[P]);
+  if (_has$2(O, P)) return _propertyDesc(!_objectPie$1.f.call(O, P), O[P]);
 };
 var _objectGopd$1 = {
 	f: f$8
@@ -6903,12 +6909,12 @@ var $defineProperty$1 = function defineProperty(it, key, D) {
   _anObject(it);
   key = _toPrimitive(key, true);
   _anObject(D);
-  if (_has(AllSymbols$1, key)) {
+  if (_has$2(AllSymbols$1, key)) {
     if (!D.enumerable) {
-      if (!_has(it, HIDDEN$1)) dP$2(it, HIDDEN$1, _propertyDesc(1, {}));
+      if (!_has$2(it, HIDDEN$1)) dP$2(it, HIDDEN$1, _propertyDesc(1, {}));
       it[HIDDEN$1][key] = true;
     } else {
-      if (_has(it, HIDDEN$1) && it[HIDDEN$1][key]) it[HIDDEN$1][key] = false;
+      if (_has$2(it, HIDDEN$1) && it[HIDDEN$1][key]) it[HIDDEN$1][key] = false;
       D = _objectCreate$1(D, { enumerable: _propertyDesc(0, false) });
     } return setSymbolDesc$1(it, key, D);
   } return dP$2(it, key, D);
@@ -6927,15 +6933,15 @@ var $create$1 = function create(it, P) {
 };
 var $propertyIsEnumerable$1 = function propertyIsEnumerable(key) {
   var E = isEnum$1.call(this, key = _toPrimitive(key, true));
-  if (this === ObjectProto$2 && _has(AllSymbols$1, key) && !_has(OPSymbols$1, key)) return false;
-  return E || !_has(this, key) || !_has(AllSymbols$1, key) || _has(this, HIDDEN$1) && this[HIDDEN$1][key] ? E : true;
+  if (this === ObjectProto$2 && _has$2(AllSymbols$1, key) && !_has$2(OPSymbols$1, key)) return false;
+  return E || !_has$2(this, key) || !_has$2(AllSymbols$1, key) || _has$2(this, HIDDEN$1) && this[HIDDEN$1][key] ? E : true;
 };
 var $getOwnPropertyDescriptor$1 = function getOwnPropertyDescriptor(it, key) {
   it = _toIobject(it);
   key = _toPrimitive(key, true);
-  if (it === ObjectProto$2 && _has(AllSymbols$1, key) && !_has(OPSymbols$1, key)) return;
+  if (it === ObjectProto$2 && _has$2(AllSymbols$1, key) && !_has$2(OPSymbols$1, key)) return;
   var D = gOPD$1$1(it, key);
-  if (D && _has(AllSymbols$1, key) && !(_has(it, HIDDEN$1) && it[HIDDEN$1][key])) D.enumerable = true;
+  if (D && _has$2(AllSymbols$1, key) && !(_has$2(it, HIDDEN$1) && it[HIDDEN$1][key])) D.enumerable = true;
   return D;
 };
 var $getOwnPropertyNames$1 = function getOwnPropertyNames(it) {
@@ -6944,7 +6950,7 @@ var $getOwnPropertyNames$1 = function getOwnPropertyNames(it) {
   var i = 0;
   var key;
   while (names.length > i) {
-    if (!_has(AllSymbols$1, key = names[i++]) && key != HIDDEN$1 && key != META$1) result.push(key);
+    if (!_has$2(AllSymbols$1, key = names[i++]) && key != HIDDEN$1 && key != META$1) result.push(key);
   } return result;
 };
 var $getOwnPropertySymbols$1 = function getOwnPropertySymbols(it) {
@@ -6954,7 +6960,7 @@ var $getOwnPropertySymbols$1 = function getOwnPropertySymbols(it) {
   var i = 0;
   var key;
   while (names.length > i) {
-    if (_has(AllSymbols$1, key = names[i++]) && (IS_OP ? _has(ObjectProto$2, key) : true)) result.push(AllSymbols$1[key]);
+    if (_has$2(AllSymbols$1, key = names[i++]) && (IS_OP ? _has$2(ObjectProto$2, key) : true)) result.push(AllSymbols$1[key]);
   } return result;
 };
 if (!USE_NATIVE$2) {
@@ -6963,7 +6969,7 @@ if (!USE_NATIVE$2) {
     var tag = _uid(arguments.length > 0 ? arguments[0] : undefined);
     var $set = function (value) {
       if (this === ObjectProto$2) $set.call(OPSymbols$1, value);
-      if (_has(this, HIDDEN$1) && _has(this[HIDDEN$1], tag)) this[HIDDEN$1][tag] = false;
+      if (_has$2(this, HIDDEN$1) && _has$2(this[HIDDEN$1], tag)) this[HIDDEN$1][tag] = false;
       setSymbolDesc$1(this, tag, _propertyDesc(1, value));
     };
     if (_descriptors && setter$1) setSymbolDesc$1(ObjectProto$2, tag, { configurable: true, set: $set });
@@ -6991,7 +6997,7 @@ for (var es6Symbols$1 = (
 for (var wellKnownSymbols$1 = _objectKeys(_wks$1.store), k$1 = 0; wellKnownSymbols$1.length > k$1;) _wksDefine$1(wellKnownSymbols$1[k$1++]);
 _export(_export.S + _export.F * !USE_NATIVE$2, 'Symbol', {
   'for': function (key) {
-    return _has(SymbolRegistry$1, key += '')
+    return _has$2(SymbolRegistry$1, key += '')
       ? SymbolRegistry$1[key]
       : SymbolRegistry$1[key] = $Symbol$1(key);
   },
@@ -7077,7 +7083,7 @@ var _possibleConstructorReturn = unwrapExports(possibleConstructorReturn);
 
 var check = function (O, proto) {
   _anObject(O);
-  if (!_isObject(proto) && proto !== null) throw TypeError(proto + ": can't set as prototype!");
+  if (!_isObject$2(proto) && proto !== null) throw TypeError(proto + ": can't set as prototype!");
 };
 var _setProto = {
   set: Object.setPrototypeOf || ('__proto__' in {} ?
@@ -7243,7 +7249,8 @@ var Vue = void 0;
 var Model = function () {
   _createClass(Model, null, [{
     key: 'init',
-    value: function init(_Vue) {
+    value: function init(_Vue, _options) {
+      init$1(_options);
       Vue = process.env.NODE_ENV === 'test' ? require('vue') : _Vue;
     }
   }, {
@@ -7327,29 +7334,40 @@ var Model = function () {
         },
         destroy: function destroy() {
           return this.$request(this.urlRoot, {
-            method: 'DELETE'
+            method: 'delete'
           });
         },
         save: function save(_body) {
           var _this2 = this;
           var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
           var _options = {
-            path: ''
+            path: '',
+            diff: true,
+            consume: true,
+            method: 'put'
           };
           _options = mergeDeepRight_1(_options, options);
-          var changed = this.isNew ? _body : getDiff(this.$data, _body);
+          var changed = !options.diff || this.isNew ? _body : getDiff(this.$data, _body);
           if (isEmpty_1(changed)) {
             return _Promise$1.resolve();
           }
           var body = this.encode(changed);
-          var method = this.isNew ? 'POST' : 'PUT';
+          var method = void 0;
+          if (options.method) {
+            method = options.method;
+          } else if (this.isNew) {
+            method = 'post';
+          } else {
+            method = _options.method;
+          }
           var path = _options.path ? '/' + _options.path : '';
           var request = this.$request(this.url + path, {
             method: method,
             body: body
           });
-          request.then(function () {
-            _this2.set(body);
+          request.then(function (response) {
+            var data = _options.consume ? response : body;
+            _this2.set(data);
           });
           return request;
         },
@@ -7398,9 +7416,14 @@ var VueModel = function () {
   }
   _createClass(VueModel, null, [{
     key: 'install',
-    value: function install(Vue, options) {
+    value: function install(Vue) {
+      var _options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+      var defaults = {
+        schemaWarnings: true
+      };
+      var options = mergeDeepRight_1(defaults, _options);
       Vue.mixin(makeMixin(Vue));
-      Model.init(Vue);
+      Model.init(Vue, options);
     }
   }]);
   return VueModel;
