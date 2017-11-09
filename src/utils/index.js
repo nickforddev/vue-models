@@ -9,6 +9,12 @@ import {
 import { Request } from 'vue-requests'
 export { Request }
 
+let options
+
+export function init(_options) {
+  options = _options
+}
+
 // is property defined
 
 export function isDef (obj) {
@@ -131,7 +137,9 @@ const traverse = (data, schema, func) => {
       } else if (schema.properties) {
         output = traverse(data, schema.properties, func)
       } else {
-        console.warn('Key missing from schema: ' + key)
+        if (options.schemaWarnings) {
+          console.warn('Key missing from schema: ' + key)
+        }
         output[key] = data[key]
       }
     }

@@ -10,7 +10,8 @@ import * as utils from './utils'
 let Vue
 
 class Model {
-  static init (_Vue) {
+  static init (_Vue, _options) {
+    utils.init(_options)
     Vue = process.env.NODE_ENV === 'test'
       ? require('vue')
       : _Vue
@@ -78,9 +79,6 @@ class Model {
       methods: {
         async fetch() {
           let response = await this.$request(this.urlRoot)
-          // if (this.$options.beforeSet) {
-          //   response = this.$options.beforeSet(response)
-          // }
           this.set(response)
           return response
         },
@@ -97,9 +95,6 @@ class Model {
             method: 'put'
           }
           _options = mergeDeepRight(_options, options)
-          // const changed = this.isNew
-          //   ? _body
-          //   : utils.getDiff(this.$data, _body)
 
           const changed = !options.diff || this.isNew
             ? _body

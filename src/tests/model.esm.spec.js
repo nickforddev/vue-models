@@ -13,7 +13,9 @@ Vue.use(VueRequests, {
     global.fetchCount++
   }
 })
-Vue.use(VueModel)
+Vue.use(VueModel, {
+  schemaWarnings: false
+})
 
 fetch.mockResponse(JSON.stringify(tenant_data), {
   status: 200
