@@ -1,5 +1,5 @@
 /**
-  * vue-models v1.4.4
+  * vue-models v1.4.6
   * (c) 2017 Nick Ford
   * @license MIT
   */
@@ -5363,6 +5363,14 @@ var resetState = function resetState(model, defaults) {
   });
 };
 
+var makeQueryString = function makeQueryString(obj) {
+  var arr = [];
+  for (var key in obj) {
+    arr.push(key + '=' + obj[key]);
+  }
+  return arr.join('&');
+};
+
 var makeComputedProp = function makeComputedProp(vm, key) {
   if (vm.$options['$' + key]) {
     throw new ReferenceError('Model \'' + key + '\' has a naming conflict\n       with an existing computed property\'');
@@ -7361,6 +7369,9 @@ var Model = function () {
             method = _options.method;
           }
           var path = _options.path ? '/' + _options.path : '';
+          if (_options.query) {
+            path += '?' + makeQueryString(_options.query);
+          }
           var request = this.$request(this.url + path, {
             method: method,
             body: body
