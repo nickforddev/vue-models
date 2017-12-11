@@ -293,6 +293,17 @@ export default (Vue, Model, User) => {
             .toBe('testtesttest')
         })
     })
+
+    it('should save via the custom url function', () => {
+      expect.assertions(1)
+      return user.save({
+        test: true
+      })
+        .then(() => {
+          expect(global.fetch.mock.calls[global.fetchCount - 1][0])
+            .toBe('testtesttest')
+        })
+    })
   })
 
   describe('VueModels - custom urls - property', () => {
@@ -305,6 +316,37 @@ export default (Vue, Model, User) => {
         .then(() => {
           expect(global.fetch.mock.calls[global.fetchCount - 1][0])
             .toBe('testproperty')
+        })
+    })
+  })
+
+  describe('VueModels - save with query', () => {
+    it('should save with a query string', () => {
+      const user = new User()
+      expect.assertions(1)
+      return user.save({ test: true }, {
+        query: {
+          save: false
+        }
+      })
+        .then(() => {
+          expect(global.fetch.mock.calls[global.fetchCount - 1][0])
+            .toBe('users?save=false')
+        })
+    })
+
+    it('should save with multiple query strings', () => {
+      const user = new User()
+      expect.assertions(1)
+      return user.save({ test: true }, {
+        query: {
+          save: false,
+          test: true
+        }
+      })
+        .then(() => {
+          expect(global.fetch.mock.calls[global.fetchCount - 1][0])
+            .toBe('users?save=false&test=true')
         })
     })
   })

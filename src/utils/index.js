@@ -224,3 +224,13 @@ export const resetAllStates = (state, modules) => {
     resetState(state[key], modules[key].defaults())
   })
 }
+
+// assemble query string
+
+export const makeQueryString = (obj) => {
+  const arr = []
+  for (let key in obj) {
+    arr.push(`${key}=${obj[key]}`)
+  }
+  return arr.join('&')
+}

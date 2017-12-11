@@ -113,9 +113,12 @@ class Model {
           } else {
             method = _options.method
           }
-          const path = _options.path
+          let path = _options.path
             ? '/' + _options.path
             : ''
+          if (_options.query) {
+            path += `?${utils.makeQueryString(_options.query)}`
+          }
           const request = this.$request(this.url + path, {
             method,
             body
