@@ -1,6 +1,6 @@
 /**
   * vue-models v1.4.6
-  * (c) 2017 Nick Ford
+  * (c) 2018 Nick Ford
   * @license MIT
   */
 function _isPlaceholder(a) {
@@ -7382,7 +7382,7 @@ var Model = function () {
           });
           return request;
         },
-        data: function data() {
+        get_data: function get_data() {
           var data = {};
           for (var key in _schema) {
             data[key] = this[key];
@@ -7403,11 +7403,11 @@ var Model = function () {
           return modelToJSON(this);
         },
         decode: function decode() {
-          var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.data();
+          var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.get_data();
           return decodeData(removeUnderscores(data), _schema);
         },
         encode: function encode() {
-          var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.data();
+          var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.get_data();
           return addUnderscores(encodeData(data, _schema));
         },
         schema: function schema() {
