@@ -131,7 +131,7 @@ class Model {
           })
           return request
         },
-        data() {
+        get_data() {
           let data = {}
           for (let key in schema) {
             data[key] = this[key]
@@ -151,10 +151,10 @@ class Model {
         toJSON() {
           return utils.modelToJSON(this)
         },
-        decode(data = this.data()) {
+        decode(data = this.get_data()) {
           return utils.decodeData(utils.removeUnderscores(data), schema)
         },
-        encode(data = this.data()) {
+        encode(data = this.get_data()) {
           return utils.addUnderscores(utils.encodeData(data, schema))
         },
         schema() {
