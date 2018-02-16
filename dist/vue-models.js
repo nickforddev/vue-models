@@ -1,5 +1,5 @@
 /**
-  * vue-models v1.4.6
+  * vue-models v1.4.8
   * (c) 2018 Nick Ford
   * @license MIT
   */
@@ -7398,7 +7398,9 @@ var Model = function () {
         set: function set(data) {
           var data_decoded = this.decode(data);
           for (var key in data_decoded) {
-            this[key] = data_decoded[key];
+            if (!(key in this.$options.computed)) {
+              this[key] = data_decoded[key];
+            }
           }
           return this;
         },
