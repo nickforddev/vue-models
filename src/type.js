@@ -5,7 +5,7 @@ export default class Type {
     this.value = undefined
     if (key) this.key = key
     const val = this.getValue(value)
-    if (val) this.set(val)
+    if (![undefined, ''].includes(val)) this.set(val)
     return this
   }
   set(value) {

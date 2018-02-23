@@ -7168,7 +7168,7 @@ var Type = function () {
     this.value = undefined;
     if (key) this.key = key;
     var val = this.getValue(value);
-    if (val) this.set(val);
+    if (![undefined, ''].includes(val)) this.set(val);
     return this;
   }
   _createClass(Type, [{
