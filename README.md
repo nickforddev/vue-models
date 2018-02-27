@@ -1,6 +1,7 @@
 # vue-models
 
 [![Version](https://img.shields.io/npm/v/vue-models.svg)](#)
+[![NPM Downloads](https://img.shields.io/npm/dt/vue-models.svg?maxAge=2592000)](https://www.npmjs.com/package/vue-models)
 [![Build](https://travis-ci.org/nickforddesign/vue-models.svg?branch=master)](#)
 [![Coverage Status](https://coveralls.io/repos/github/nickforddesign/vue-models/badge.svg?branch=master)](https://coveralls.io/github/nickforddesign/vue-models?branch=master)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
@@ -70,9 +71,9 @@ console.log(user.full_name) // returns 'Jane Doe'
 
 ```
 
-## Computed Properties
+## Model.defaults
 
-The Model class has some default methods and computed attributes that are useful for basic CRUD operations, but can be overrided by passing options to the constructor:
+When defining a model, use the defaults static method to set attributes, computed properties, and methods as you would a normal Vue instance. There are a few special built-in properties/methods, which can be overwritten via the second argument of the model constructor.
 
 ### Model.basePath
 
@@ -139,13 +140,35 @@ Based on whether or not the model has an id. Affects whether or not Model.save i
 
 ## Methods
 
+### Model.set(data)
+
+The `Model.set` method sets data on the model. If there is a naming conflict between a computed property and a data attribute, the data attribute will be skipped. When binding a model to a Vue component as described below, the following is a valid shortcut to the `Model.set` method:
+
+```js
+export default {
+  models: {
+    user() {
+      return new UserModel(data)
+    }
+  },
+  created() {
+    this.$user = {
+      id: 123
+    } // calls this.$user.set({ id: 123 })
+  }
+}
+```
+
 ### Model.fetch()
 
-Fetches the model via a GET at Model.url
+Fetches the model via a GET to `Model.url` and calls the `Model.set` method with response data.
 
 ### Model.save(data, options)
 
-Data must be valid json, options may contain a `path` property in order to deviate from the standard urlRoot.
+The save method passed the first argument to the `Model.set` method and creates a POST request if the model is new, and a PUT for models that already have an id. The following properties may be passed in an object as the second argument:
+
+1. `path`: A string that will be appended to the basePath of the model when making the request
+2. `consume`: A boolean that dictates whether or not to consume the response to the request (calls the `set` method with the response data)
 
 ### Model.destroy()
 
@@ -157,8 +180,7 @@ Uses the schema definition to reset all values to their default values.
 
 ### Model.toJSON()
 
-Returns all approved data attributes, in addition to all computed properties as json.
-
+Returns all data attributes and computed properties as json.
 
 ## Binding to Vue components
 
@@ -177,7 +199,11 @@ export default {
 }
 ```
 
-NOTE: By default, models are reset when the parent component is destroyed. To disable this, the `persist: true` option can be provided in the model options.
+NOTE: By default, models are reset when the parent component is destroyed. To disable this, the `persist: true` option can be provided in the model options (second argument in the model constructor).
+
+## Model options
+
+The first argument of the model constructor is for data. Any data passed to the constructor will be set right away. The second argument is for options, which can be used to override any of the model's defaults.
 
 ## Schema
 
@@ -279,19 +305,22 @@ export class ISODate extends Type {
 
 ## Requests
 
-This plugin uses the [`vue-requests`](http://github.com/nickforddesign/vue-requests) plugin, which is a wrapper around the fetch API and includes the [`whatwg-fetch`](https://github.com/github/fetch) polyfill.
+This plugin uses the [`vue-requests`](http://github.com/nickforddesign/vue-requests) plugin, which is a simple Vue plugin for the fetch API and includes the [`whatwg-fetch`](https://github.com/github/fetch) polyfill.
 
-## Build Setup
+## Contributing
+
+Feel free to submit issues and/or pull requests! If you want to contribute, clone the repo and use the following to get started:
 
 ``` bash
 # install dependencies
 npm install
 
-# serve demo at localhost:8080
+# serve demo at localhost:8989
 npm start
 
 # run tests with jest
 npm test
-```
 
-For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+# bundle dist version
+npm run build
+```

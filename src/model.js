@@ -4,7 +4,6 @@ import {
   isEmpty
 } from 'ramda'
 
-import { ISODate } from './demo/types'
 import * as utils from './utils'
 
 let Vue
@@ -20,12 +19,6 @@ class Model {
     return {
       id: {
         type: String
-      },
-      created: {
-        type: ISODate
-      },
-      updated: {
-        type: ISODate
       }
     }
   }
@@ -165,7 +158,6 @@ class Model {
       }
     }
     const model_options = mergeDeepRight(default_options, _options)
-
     return new Vue(model_options)
   }
 }

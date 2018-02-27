@@ -329,10 +329,10 @@ export default (Vue, Model, User) => {
           save: false
         }
       })
-        .then(() => {
-          expect(global.fetch.mock.calls[global.fetchCount - 1][0])
-            .toBe('users?save=false')
-        })
+      .then(() => {
+        expect(global.fetch.mock.calls[global.fetchCount - 1][0])
+          .toBe('users?save=false')
+      })
     })
 
     it('should save with multiple query strings', () => {
@@ -344,10 +344,10 @@ export default (Vue, Model, User) => {
           test: true
         }
       })
-        .then(() => {
-          expect(global.fetch.mock.calls[global.fetchCount - 1][0])
-            .toBe('users?save=false&test=true')
-        })
+      .then(() => {
+        expect(global.fetch.mock.calls[global.fetchCount - 1][0])
+          .toBe('users?save=false&test=true')
+      })
     })
   })
 }
