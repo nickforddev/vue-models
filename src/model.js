@@ -97,7 +97,7 @@ class Model {
             return Promise.resolve()
           }
           const body = this.encode(changed)
-          const methods = this.isNew
+          const method = this.isNew
             ? 'post'
             : _options.method
           
