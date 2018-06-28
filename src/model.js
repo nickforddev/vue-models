@@ -97,17 +97,21 @@ class Model {
             return Promise.resolve()
           }
           const body = this.encode(changed)
-
-          let method
+          const methods = this.isNew
+            ? 'post'
+            : _options.method
+          
+          /* let method
           if (options.method) {
             method = options.method
           } else if (this.isNew) {
             method = 'post'
           } else {
             method = _options.method
-          }
+          } */
+          
           let path = _options.path
-            ? '/' + _options.path
+            ? `/${_options.path}`
             : ''
           if (_options.query) {
             path += `?${utils.makeQueryString(_options.query)}`
