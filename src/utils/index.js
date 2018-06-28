@@ -18,8 +18,11 @@ export function init(_options) {
 // is property defined
 
 export function isDef (obj) {
-  if (obj === undefined) return false
-  return !isEmpty(obj)
+  return obj === undefined
+    ? false
+    : !isEmpty(obj)
+//   if (obj === undefined) return false
+//   return !isEmpty(obj)
 }
 
 // get props that changed
